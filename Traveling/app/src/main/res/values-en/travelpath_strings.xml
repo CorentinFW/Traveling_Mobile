@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="travelpath_profile_photo">Profile photo</string>
+    <string name="travelpath_home">Home</string>
+    <string name="travelpath_back">Back</string>
+    <string name="travelpath_consult">Consult</string>
+    <string name="travelpath_intro_image">Intro image</string>
+    <string name="travelpath_intro_title">Create your personalized visit route</string>
+    <string name="travelpath_accordion_information_title">Information</string>
+    <string name="travelpath_accordion_information_content">Tell us what you want, we will build your ideal itinerary.</string>
+    <string name="travelpath_accordion_route_title">Route</string>
+    <string name="travelpath_accordion_route_content">View your itineraries on the map for a more interactive route.</string>
+    <string name="travelpath_accordion_follow_title">Tracking</string>
+    <string name="travelpath_accordion_follow_content">Follow and share your favorite routes anytime!</string>
+    <string name="travelpath_start">Start</string>
+    <string name="travelpath_continue">Continue</string>
+    <string name="travelpath_generate_route">Generate my route</string>
+    <string name="travelpath_progress_zero">0%</string>
+    <string name="travelpath_category_restaurant">Restaurant</string>
+    <string name="travelpath_category_culture">Culture</string>
+    <string name="travelpath_category_monument">Monument</string>
+    <string name="travelpath_category_leisure">Leisure</string>
+    <string name="travelpath_category_shopping">Shopping</string>
+    <string name="travelpath_category_events">Events</string>
+    <string name="travelpath_search_hint">Search for a place or activity</string>
+    <string name="travelpath_results_count_placeholder">X results</string>
+    <string name="travelpath_map">Map</string>
+    <string name="travelpath_result_image">Place image</string>
+    <string name="travelpath_result_place_name_placeholder">Place name</string>
+    <string name="travelpath_result_add">Add</string>
+    <string name="travelpath_result_favorite">Favorite</string>
+    <string name="travelpath_visit_duration_title">Visit duration</string>
+    <string name="travelpath_duration_half_day">Half-day</string>
+    <string name="travelpath_duration_full_day">Full day</string>
+    <string name="travelpath_duration_multiple_days">Several days</string>
+    <string name="travelpath_days_input_hint">Number of days</string>
+    <string name="travelpath_visit_start_title">Visit start</string>
+    <string name="travelpath_budget_min_label">Min:</string>
+    <string name="travelpath_budget_max_label">Max:</string>
+    <string name="travelpath_budget_currency">€</string>
+    <string name="travelpath_visit_date_title">Visit date</string>
+    <string name="travelpath_effort_title">Effort level</string>
+    <string name="travelpath_effort_low">Low</string>
+    <string name="travelpath_effort_medium">Medium</string>
+    <string name="travelpath_effort_high">High</string>
+    <string name="travelpath_adult_count">Number of adults</string>
+    <string name="travelpath_children_count">Number of children</string>
+    <string name="travelpath_count_hint">0</string>
+    <string name="travelpath_with_children">With children</string>
+    <string name="travelpath_with_senior">With elderly person</string>
+    <string name="travelpath_prm_accessibility">PRM accessibility</string>
+    <string name="travelpath_sensitive_cold">Sensitive to cold</string>
+    <string name="travelpath_sensitive_heat">Sensitive to heat</string>
+    <string name="travelpath_sensitive_humidity">Sensitive to humidity</string>
+    <string name="travelpath_summary_title">Summary</string>
+    <string name="travelpath_summary_activities">Activities:</string>
+    <string name="travelpath_summary_budget">Budget:</string>
+    <string name="travelpath_summary_duration">Duration:</string>
+    <string name="travelpath_summary_effort">Effort:</string>
+    <string name="travelpath_summary_activities_placeholder">Restaurant, Leisure</string>
+    <string name="travelpath_summary_budget_placeholder">200-500€</string>
+    <string name="travelpath_summary_duration_placeholder">Full day, 04/21/2026</string>
+    <string name="travelpath_summary_effort_placeholder">Medium</string>
+    <string name="travelpath_route_type_title">Route type</string>
+    <string name="travelpath_selected_place">Selected place</string>
+    <string name="travelpath_preferences">Preferences</string>
+    <string name="travelpath_summary_arrow">Arrow</string>
+    <string name="travelpath_itinerary_title">Itinerary</string>
+    <string name="travelpath_save">Save</string>
+    <string name="travelpath_recalculate">Recalculate</string>
+    <string name="travelpath_export">Export</string>
+    <string name="travelpath_share">Share</string>
+    <string name="travelpath_route_name_title">Route name</string>
+    <string name="travelpath_itinerary_map">Itinerary map</string>
+    <string name="travelpath_itinerary_budget_placeholder">X€</string>
+    <string name="travelpath_itinerary_days_placeholder">Y days</string>
+    <string name="travelpath_itinerary_effort_placeholder">Medium</string>
+    <string name="travelpath_my_routes_title">My routes</string>
+    <string name="travelpath_new_route">New route</string>
+    <string name="travelpath_my_route_image">Route image</string>
+    <string name="travelpath_my_route_name_placeholder">Route name</string>
+    <string name="travelpath_my_route_budget_placeholder">X€</string>
+    <string name="travelpath_my_route_days_placeholder">Y days</string>
+    <string name="travelpath_my_route_effort_placeholder">Medium</string>
+    <string name="travelpath_my_route_places_placeholder">Place name, Place name,...</string>
+    <string name="travelpath_step_index_placeholder">1.</string>
+    <string name="travelpath_step_place_placeholder">Place name</string>
+    <string name="travelpath_step_meta_placeholder">Xm | Y min | Z</string>
+    <string name="travelpath_step_star">Star</string>
+    <string name="travelpath_place_detail_title">Place name</string>
+    <string name="travelpath_place_map">Place map</string>
+
+    <string-array name="travelpath_route_type_options">
+        <item>Simple</item>
+        <item>Balanced</item>
+        <item>Any</item>
+    </string-array>
+
+    <string-array name="travelpath_visit_start_options">
+        <item>Morning</item>
+        <item>Noon</item>
+    </string-array>
+
+    <string-array name="travelpath_filter_placeholders">
+        <item>Filter</item>
+        <item>Filter placeholder 1</item>
+        <item>Filter placeholder 2</item>
+        <item>Filter placeholder 3</item>
+    </string-array>
+
+    <string-array name="travelpath_sort_placeholders">
+        <item>Sort</item>
+        <item>Sort placeholder 1</item>
+        <item>Sort placeholder 2</item>
+        <item>Sort placeholder 3</item>
+    </string-array>
+</resources>
+
