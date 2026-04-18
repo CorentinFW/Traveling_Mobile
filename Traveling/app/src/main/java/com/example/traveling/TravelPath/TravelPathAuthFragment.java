@@ -13,7 +13,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.example.traveling.MainActivity;
 import com.example.traveling.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -74,10 +76,6 @@ public class TravelPathAuthFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (firebaseAuth.getCurrentUser() != null) {
-            notifyAuthSuccess();
-            return;
-        }
 
         bindViews(view);
         setupActions();
@@ -230,6 +228,16 @@ public class TravelPathAuthFragment extends Fragment {
         Fragment parent = getParentFragment();
         if (parent instanceof TravelPathMainFragment) {
             ((TravelPathMainFragment) parent).onAuthenticationSucceeded();
+            return;
+        }
+
+        if (requireActivity() instanceof MainActivity) {
+            ((MainActivity) requireActivity()).refreshSessionButton();
+        }
+
+        FragmentManager fragmentManager = getParentFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
         }
     }
 

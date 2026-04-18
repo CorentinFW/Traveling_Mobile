@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.traveling.TravelPath.TravelPathAuthFragment;
 import com.example.traveling.travelshare.data.TravelShareDataProvider;
 import com.example.traveling.travelshare.domain.TravelShareSessionRepository;
 import com.example.traveling.travelshare.ui.TravelShareAddPostFragment;
@@ -19,7 +20,6 @@ import com.example.traveling.travelshare.ui.TravelShareHomeFragment;
 import com.example.traveling.travelshare.ui.TravelShareItineraryFragment;
 import com.example.traveling.travelshare.ui.TravelShareMessagesFragment;
 import com.example.traveling.travelshare.ui.TravelSharePostDetailFragment;
-import com.example.traveling.travelshare.ui.TravelShareProfileFragment;
 import com.example.traveling.travelshare.ui.TravelShareSearchFragment;
 import com.example.traveling.travelshare.ui.navigation.TravelShareBottomNavConfig;
 import com.example.traveling.travelshare.ui.navigation.TravelShareNavItem;
@@ -88,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSessionScreen() {
-        Fragment fragment = sessionRepository.isAuthenticated()
-                ? new TravelShareProfileFragment()
-                : new TravelShareAuthFragment();
+        Fragment fragment = new TravelPathAuthFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
