@@ -1,11 +1,13 @@
 package com.example.traveling.travelshare.data;
 
+import com.example.traveling.travelshare.domain.TravelShareMessageRepository;
 import com.example.traveling.travelshare.domain.TravelSharePostRepository;
 import com.example.traveling.travelshare.domain.TravelShareSessionRepository;
 
 public final class TravelShareDataProvider {
 
     private static final TravelSharePostRepository POST_REPOSITORY = new InMemoryTravelSharePostRepository();
+    private static final TravelShareMessageRepository MESSAGE_REPOSITORY = new InMemoryTravelShareMessageRepository();
     private static final TravelShareSessionRepository SESSION_REPOSITORY = new InMemoryTravelShareSessionRepository();
 
     private TravelShareDataProvider() {
@@ -13,6 +15,10 @@ public final class TravelShareDataProvider {
 
     public static TravelSharePostRepository postRepository() {
         return POST_REPOSITORY;
+    }
+
+    public static TravelShareMessageRepository messageRepository() {
+        return MESSAGE_REPOSITORY;
     }
 
     public static TravelShareSessionRepository sessionRepository() {

@@ -1,5 +1,6 @@
 package com.example.traveling;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -99,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchToTab(int itemId) {
+        if (itemId == R.id.travelshare_nav_itinerary) {
+            startActivity(new Intent(this, TravelPathActivity.class));
+            finish();
+            return;
+        }
+
         TravelShareNavItem navItem = navItemsById.get(itemId);
         if (navItem == null) {
             return;

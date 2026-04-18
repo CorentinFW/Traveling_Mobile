@@ -1,7 +1,10 @@
 package com.example.traveling;
 
+import com.example.traveling.travelshare.data.InMemoryTravelShareMessageRepository;
 import com.example.traveling.travelshare.data.InMemoryTravelSharePostRepository;
 import com.example.traveling.travelshare.data.InMemoryTravelShareSessionRepository;
+import com.example.traveling.travelshare.domain.TravelShareConversation;
+import com.example.traveling.travelshare.domain.TravelShareMessage;
 import com.example.traveling.travelshare.domain.TravelSharePost;
 
 import org.junit.Test;
@@ -11,6 +14,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class TravelShareRepositoryTest {
@@ -44,6 +48,41 @@ public class TravelShareRepositoryTest {
         List<TravelSharePost> search = repository.searchPosts("Seine");
         assertFalse(search.isEmpty());
         assertEquals(created.getId(), search.get(0).getId());
+    }
+
+    @Test
+    public void messagesRepositoryReturnsSeededConversations() {
+        InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
+
+        List<TravelShareConversation> conversations = repository.getConversations();
+
+        assertFalse(conversations.isEmpty());
+        assertEquals("c1", conversations.get(0).getId());
+    }
+
+    @Test
+    public void sendMessageAddsMessageAndMovesConversationToTop() {
+        InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
+
+        TravelShareMessage sent = repository.sendMessage("c3", "Corentin", "On prepare un groupe prive ?");
+
+        assertNotNull(sent);
+        List<TravelShareMessage> thread = repository.getMessages("c3");
+        assertFalse(thread.isEmpty());
+        assertEquals("On prepare un groupe prive ?", thread.get(thread.size() - 1).getText());
+
+        List<TravelShareConversation> conversations = repository.getConversations();
+        assertEquals("c3", conversations.get(0).getId());
+        assertEquals("On prepare un groupe prive ?", conversations.get(0).getLastMessagePreview());
+    }
+
+    @Test
+    public void sendMessageRejectsBlankText() {
+        InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
+
+        TravelShareMessage sent = repository.sendMessage("c1", "Corentin", "   ");
+
+        assertNull(sent);
     }
 
     @Test

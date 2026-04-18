@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Copilot local metadata
+/.idea/*copilot*
+
+# Firebase local config
+/app/google-services.json

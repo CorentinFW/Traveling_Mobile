@@ -27,7 +27,16 @@
     <string name="travelshare_search_button">Chercher</string>
 
     <string name="travelshare_messages_title">Messages</string>
-    <string name="travelshare_messages_placeholder">DM et groupes prives arrives a la prochaine etape.</string>
+    <string name="travelshare_messages_connected_hint">Conversations privees et groupes</string>
+    <string name="travelshare_messages_need_login">Connecte-toi pour acceder aux messages</string>
+    <string name="travelshare_messages_type_private">prive</string>
+    <string name="travelshare_messages_type_group">groupe</string>
+
+    <string name="travelshare_thread_connected_hint">Discussion active</string>
+    <string name="travelshare_thread_input_hint">Ecrire un message...</string>
+    <string name="travelshare_thread_send">Envoyer</string>
+    <string name="travelshare_thread_empty_message">Le message est vide</string>
+    <string name="travelshare_thread_not_found">Conversation introuvable</string>
 
     <string name="travelshare_add_title">Ajouter un post</string>
     <string name="travelshare_add_subtitle">Partage une photo de voyage avec la communaute</string>
