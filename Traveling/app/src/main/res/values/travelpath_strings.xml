@@ -90,6 +90,26 @@
     <string name="travelpath_place_detail_title">Lieu-dit</string>
     <string name="travelpath_place_map">Carte du lieu</string>
 
+    <string name="travelpath_auth_title">Connexion TravelPath</string>
+    <string name="travelpath_auth_subtitle">Connectez-vous pour sauvegarder et retrouver vos parcours.</string>
+    <string name="travelpath_auth_anonymous">Continuer en anonyme</string>
+    <string name="travelpath_auth_email_hint">Adresse e-mail</string>
+    <string name="travelpath_auth_password_hint">Mot de passe</string>
+    <string name="travelpath_auth_sign_in">Se connecter</string>
+    <string name="travelpath_auth_create_account">Creer un compte</string>
+    <string name="travelpath_auth_google">Continuer avec Google</string>
+    <string name="travelpath_auth_success">Connexion reussie.</string>
+    <string name="travelpath_auth_error_missing_credentials">Veuillez saisir un e-mail et un mot de passe.</string>
+    <string name="travelpath_auth_error_password_short">Le mot de passe doit contenir au moins 6 caracteres.</string>
+    <string name="travelpath_auth_error_invalid_credentials">Identifiants invalides.</string>
+    <string name="travelpath_auth_error_user_not_found">Aucun compte trouve pour cet e-mail.</string>
+    <string name="travelpath_auth_error_email_already_used">Cet e-mail est deja utilise.</string>
+    <string name="travelpath_auth_error_network">Probleme reseau, reessayez.</string>
+    <string name="travelpath_auth_error_missing_google_token">Token Google manquant.</string>
+    <string name="travelpath_auth_error_google_failed">Connexion Google echouee.</string>
+    <string name="travelpath_auth_error_google_cancelled">Connexion Google annulee.</string>
+    <string name="travelpath_auth_error_generic">Une erreur est survenue, veuillez reessayer.</string>
+
     <string-array name="travelpath_route_type_options">
         <item>Simple</item>
         <item>Équilibré</item>

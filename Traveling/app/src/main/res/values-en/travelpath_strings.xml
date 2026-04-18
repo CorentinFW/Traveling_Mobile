@@ -90,6 +90,26 @@
     <string name="travelpath_place_detail_title">Place name</string>
     <string name="travelpath_place_map">Place map</string>
 
+    <string name="travelpath_auth_title">TravelPath Sign In</string>
+    <string name="travelpath_auth_subtitle">Sign in to save and find your routes.</string>
+    <string name="travelpath_auth_anonymous">Continue anonymously</string>
+    <string name="travelpath_auth_email_hint">Email address</string>
+    <string name="travelpath_auth_password_hint">Password</string>
+    <string name="travelpath_auth_sign_in">Sign in</string>
+    <string name="travelpath_auth_create_account">Create account</string>
+    <string name="travelpath_auth_google">Continue with Google</string>
+    <string name="travelpath_auth_success">Signed in successfully.</string>
+    <string name="travelpath_auth_error_missing_credentials">Please enter an email and a password.</string>
+    <string name="travelpath_auth_error_password_short">Password must be at least 6 characters.</string>
+    <string name="travelpath_auth_error_invalid_credentials">Invalid credentials.</string>
+    <string name="travelpath_auth_error_user_not_found">No account found for this email.</string>
+    <string name="travelpath_auth_error_email_already_used">This email is already used.</string>
+    <string name="travelpath_auth_error_network">Network issue, please retry.</string>
+    <string name="travelpath_auth_error_missing_google_token">Missing Google token.</string>
+    <string name="travelpath_auth_error_google_failed">Google sign-in failed.</string>
+    <string name="travelpath_auth_error_google_cancelled">Google sign-in cancelled.</string>
+    <string name="travelpath_auth_error_generic">An error occurred, please try again.</string>
+
     <string-array name="travelpath_route_type_options">
         <item>Simple</item>
         <item>Balanced</item>

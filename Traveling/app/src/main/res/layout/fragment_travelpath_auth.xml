@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/travelpath_auth_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/travelpath_auth_title"
+            android:textColor="#111827"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/travelpath_auth_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/travelpath_auth_subtitle"
+            android:textColor="#4B5563"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/travelpath_auth_anonymous_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#000000"
+            android:text="@string/travelpath_auth_anonymous"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#D1D5DB" />
+
+        <EditText
+            android:id="@+id/travelpath_auth_email_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="emailAddress"
+            android:hint="@string/travelpath_auth_email_hint"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:padding="12dp" />
+
+        <EditText
+            android:id="@+id/travelpath_auth_password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autofillHints="password"
+            android:hint="@string/travelpath_auth_password_hint"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/travelpath_auth_sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="14dp"
+            android:backgroundTint="#000000"
+            android:text="@string/travelpath_auth_sign_in"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/travelpath_auth_create_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#111827"
+            android:text="@string/travelpath_auth_create_account"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/travelpath_auth_google_button"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="14dp"
+            android:text="@string/travelpath_auth_google"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/travelpath_auth_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/travelpath_auth_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textColor="#374151"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+</ScrollView>
+

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.traveling.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class TravelPathMainFragment extends Fragment {
 
@@ -21,6 +22,7 @@ public class TravelPathMainFragment extends Fragment {
     private static final int MAX_HISTORY_SIZE = 5;
 
     private enum Screen {
+        AUTH,
         WELCOME,
         PREFERENCES,
         RESULTS,
@@ -44,6 +46,13 @@ public class TravelPathMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupFooterActions(view);
+
+        if (!isUserAuthenticated()) {
+            screenHistory.clear();
+            currentScreen = Screen.AUTH;
+            replaceInjectedScreen(currentScreen);
+            return;
+        }
 
         if (savedInstanceState == null) {
             currentScreen = Screen.WELCOME;
@@ -86,6 +95,12 @@ public class TravelPathMainFragment extends Fragment {
         navigateToScreen(Screen.PREFERENCES);
     }
 
+    public void onAuthenticationSucceeded() {
+        screenHistory.clear();
+        currentScreen = Screen.WELCOME;
+        replaceInjectedScreen(currentScreen);
+    }
+
     public void showResultsScreen() {
         navigateToScreen(Screen.RESULTS);
     }
@@ -115,6 +130,12 @@ public class TravelPathMainFragment extends Fragment {
     }
 
     private void navigateToPreviousInjectedScreen() {
+        if (!isUserAuthenticated()) {
+            currentScreen = Screen.AUTH;
+            replaceInjectedScreen(currentScreen);
+            return;
+        }
+
         if (screenHistory.isEmpty()) {
             return;
         }
@@ -125,6 +146,10 @@ public class TravelPathMainFragment extends Fragment {
     }
 
     private void navigateToScreen(@NonNull Screen targetScreen) {
+        if (targetScreen != Screen.AUTH && !isUserAuthenticated()) {
+            targetScreen = Screen.AUTH;
+        }
+
         if (targetScreen == currentScreen) {
             return;
         }
@@ -150,6 +175,9 @@ public class TravelPathMainFragment extends Fragment {
 
     @NonNull
     private Fragment createFragmentFor(@NonNull Screen screen) {
+        if (screen == Screen.AUTH) {
+            return new TravelPathAuthFragment();
+        }
         if (screen == Screen.ITINERARY) {
             return new TravelPathItineraryFragment();
         }
@@ -181,6 +209,12 @@ public class TravelPathMainFragment extends Fragment {
         String currentScreenName = savedInstanceState.getString(KEY_CURRENT_SCREEN, Screen.WELCOME.name());
         currentScreen = parseScreen(currentScreenName, Screen.WELCOME);
 
+        if (!isUserAuthenticated()) {
+            currentScreen = Screen.AUTH;
+            screenHistory.clear();
+            return;
+        }
+
         screenHistory.clear();
         ArrayList<String> serializedHistory = savedInstanceState.getStringArrayList(KEY_SCREEN_HISTORY);
         if (serializedHistory == null) {
@@ -206,6 +240,10 @@ public class TravelPathMainFragment extends Fragment {
         } catch (IllegalArgumentException ignored) {
             return fallback;
         }
+    }
+
+    private boolean isUserAuthenticated() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 }
 
