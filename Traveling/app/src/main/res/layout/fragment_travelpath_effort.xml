@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/travelpath_continue_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:backgroundTint="#000000"
+        android:text="@string/travelpath_continue"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/travelpath_progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginBottom="16dp"
+        android:max="100"
+        android:progress="80"
+        app:layout_constraintBottom_toTopOf="@id/travelpath_continue_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/travelpath_progress_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:id="@+id/travelpath_effort_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/travelpath_effort_title"
+                android:textColor="#111827"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/travelpath_effort_group"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="18dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/travelpath_effort_low"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/travelpath_choice_background_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/travelpath_effort_low"
+                    android:textColor="@color/travelpath_choice_text_color_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/travelpath_effort_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/travelpath_choice_background_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/travelpath_effort_medium"
+                    android:textColor="@color/travelpath_choice_text_color_selector"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/travelpath_effort_high"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/travelpath_choice_background_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/travelpath_effort_high"
+                    android:textColor="@color/travelpath_choice_text_color_selector"
+                    android:textStyle="bold" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/travelpath_adult_count"
+                        android:textColor="#111827"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/travelpath_adult_count_input"
+                        android:layout_width="130dp"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/travelpath_accordion_background"
+                        android:gravity="center"
+                        android:hint="@string/travelpath_count_hint"
+                        android:inputType="number"
+                        android:textColor="#111827"
+                        android:textColorHint="#6B7280" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/travelpath_children_count"
+                        android:textColor="#111827"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/travelpath_children_count_input"
+                        android:layout_width="130dp"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/travelpath_accordion_background"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="@string/travelpath_count_hint"
+                        android:inputType="number"
+                        android:textColor="#111827"
+                        android:textColorHint="#6B7280" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="#D1D5DB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/travelpath_with_children"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/travelpath_with_children"
+                    android:textColor="#111827" />
+
+                <CheckBox
+                    android:id="@+id/travelpath_with_senior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/travelpath_with_senior"
+                    android:textColor="#111827" />
+
+                <CheckBox
+                    android:id="@+id/travelpath_with_prm_accessibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/travelpath_prm_accessibility"
+                    android:textColor="#111827" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#D1D5DB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/travelpath_sensitive_cold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/travelpath_sensitive_cold"
+                    android:textColor="#111827" />
+
+                <CheckBox
+                    android:id="@+id/travelpath_sensitive_heat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/travelpath_sensitive_heat"
+                    android:textColor="#111827" />
+
+                <CheckBox
+                    android:id="@+id/travelpath_sensitive_humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/travelpath_sensitive_humidity"
+                    android:textColor="#111827" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
