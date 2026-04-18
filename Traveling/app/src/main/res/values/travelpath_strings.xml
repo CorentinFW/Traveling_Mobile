@@ -108,7 +108,17 @@
     <string name="travelpath_auth_error_missing_google_token">Token Google manquant.</string>
     <string name="travelpath_auth_error_google_failed">Connexion Google echouee.</string>
     <string name="travelpath_auth_error_google_cancelled">Connexion Google annulee.</string>
+    <string name="travelpath_auth_error_profile_save">Compte cree, mais impossible de sauvegarder le profil dans la base de donnees.</string>
     <string name="travelpath_auth_error_generic">Une erreur est survenue, veuillez reessayer.</string>
+
+    <string name="travelpath_db_route_saved">Parcours sauvegarde dans Firebase.</string>
+    <string name="travelpath_db_route_save_error">Sauvegarde Firebase impossible pour le moment.</string>
+    <string name="travelpath_db_loading_routes">Chargement de vos parcours...</string>
+    <string name="travelpath_db_no_routes">Aucun parcours sauvegarde pour le moment.</string>
+    <string name="travelpath_db_load_error">Impossible de charger vos parcours.</string>
+    <string name="travelpath_db_auth_required">Connectez-vous pour consulter vos parcours.</string>
+    <string name="travelpath_route_default_name_no_date">Mon parcours</string>
+    <string name="travelpath_route_default_name_format">Parcours %1$s</string>
 
     <string-array name="travelpath_route_type_options">
         <item>Simple</item>

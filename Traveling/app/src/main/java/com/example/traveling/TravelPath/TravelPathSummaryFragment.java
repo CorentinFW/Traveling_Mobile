@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.traveling.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class TravelPathSummaryFragment extends Fragment {
 
@@ -40,6 +43,8 @@ public class TravelPathSummaryFragment extends Fragment {
 
     private static final String PREFS_SUMMARY = "travelpath_summary_state";
     private static final String KEY_ROUTE_TYPE_POSITION = "route_type_position";
+
+    private final TravelPathRouteRepository routeRepository = new TravelPathRouteRepository();
 
     private TextView activitiesValue;
     private TextView budgetValue;
@@ -184,12 +189,86 @@ public class TravelPathSummaryFragment extends Fragment {
         Button continueButton = rootView.findViewById(R.id.travelpath_continue_button);
         continueButton.setOnClickListener(v -> {
             saveRouteTypeSelection();
+            saveCurrentRouteToFirestoreAndContinue();
+        });
+    }
 
-            Fragment parent = getParentFragment();
-            if (parent instanceof TravelPathMainFragment) {
-                ((TravelPathMainFragment) parent).showItineraryScreen();
+    private void saveCurrentRouteToFirestoreAndContinue() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            navigateToItinerary();
+            return;
+        }
+
+        TravelPathRoute route = buildRouteFromCurrentState();
+        routeRepository.saveRoute(user.getUid(), route, new TravelPathRouteRepository.SaveCallback() {
+            @Override
+            public void onSuccess() {
+                if (!isAdded()) {
+                    return;
+                }
+                Toast.makeText(requireContext(), R.string.travelpath_db_route_saved, Toast.LENGTH_SHORT).show();
+                navigateToItinerary();
+            }
+
+            @Override
+            public void onError(@NonNull Exception exception) {
+                if (!isAdded()) {
+                    return;
+                }
+                Toast.makeText(requireContext(), R.string.travelpath_db_route_save_error, Toast.LENGTH_SHORT).show();
+                navigateToItinerary();
             }
         });
+    }
+
+    @NonNull
+    private TravelPathRoute buildRouteFromCurrentState() {
+        TravelPathRoute route = new TravelPathRoute();
+        route.setRouteName(buildDefaultRouteName());
+        route.setActivities(readText(activitiesValue));
+
+        SharedPreferences durationPrefs = getPreferences(PREFS_DURATION_BUDGET);
+        int budgetMin = Math.max(0, durationPrefs.getInt(KEY_BUDGET_MIN, 0));
+        int budgetMax = Math.max(0, durationPrefs.getInt(KEY_BUDGET_MAX, budgetMin));
+        route.setBudgetMin(budgetMin);
+        route.setBudgetMax(Math.max(budgetMin, budgetMax));
+
+        route.setVisitSummary(readText(durationValue));
+        route.setEffort(readText(effortValue));
+        route.setRouteType(readSelectedRouteType());
+        route.setPlacesSummary(readText(activitiesValue));
+        return route;
+    }
+
+    @NonNull
+    private String buildDefaultRouteName() {
+        String date = readSavedVisitDateLabel();
+        if (date.isEmpty()) {
+            return getString(R.string.travelpath_route_default_name_no_date);
+        }
+        return getString(R.string.travelpath_route_default_name_format, date);
+    }
+
+    @NonNull
+    private String readSelectedRouteType() {
+        Object selected = routeTypeSpinner.getSelectedItem();
+        return selected == null ? "" : selected.toString();
+    }
+
+    @NonNull
+    private String readText(@Nullable TextView view) {
+        if (view == null || view.getText() == null) {
+            return "";
+        }
+        return view.getText().toString().trim();
+    }
+
+    private void navigateToItinerary() {
+        Fragment parent = getParentFragment();
+        if (parent instanceof TravelPathMainFragment) {
+            ((TravelPathMainFragment) parent).showItineraryScreen();
+        }
     }
 
     private void saveRouteTypeSelection() {

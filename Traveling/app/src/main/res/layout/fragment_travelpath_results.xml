@@ -30,12 +30,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/travelpath_map_container"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/travelpath_intro_image_placeholder"
         android:contentDescription="@string/travelpath_map"
         app:layout_constraintBottom_toTopOf="@id/travelpath_progress_bar"
         app:layout_constraintEnd_toEndOf="parent"

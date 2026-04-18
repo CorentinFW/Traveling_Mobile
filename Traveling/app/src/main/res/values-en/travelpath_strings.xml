@@ -108,7 +108,17 @@
     <string name="travelpath_auth_error_missing_google_token">Missing Google token.</string>
     <string name="travelpath_auth_error_google_failed">Google sign-in failed.</string>
     <string name="travelpath_auth_error_google_cancelled">Google sign-in cancelled.</string>
+    <string name="travelpath_auth_error_profile_save">Account created, but profile could not be saved to the database.</string>
     <string name="travelpath_auth_error_generic">An error occurred, please try again.</string>
+
+    <string name="travelpath_db_route_saved">Route saved to Firebase.</string>
+    <string name="travelpath_db_route_save_error">Unable to save route to Firebase right now.</string>
+    <string name="travelpath_db_loading_routes">Loading your routes...</string>
+    <string name="travelpath_db_no_routes">No saved routes yet.</string>
+    <string name="travelpath_db_load_error">Unable to load your routes.</string>
+    <string name="travelpath_db_auth_required">Sign in to view your routes.</string>
+    <string name="travelpath_route_default_name_no_date">My route</string>
+    <string name="travelpath_route_default_name_format">Route %1$s</string>
 
     <string-array name="travelpath_route_type_options">
         <item>Simple</item>

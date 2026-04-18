@@ -28,11 +28,13 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class TravelPathAuthFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
+    private final TravelPathUserRepository userRepository = new TravelPathUserRepository();
     private GoogleSignInClient googleSignInClient;
 
     private Button anonymousButton;
@@ -143,8 +145,31 @@ public class TravelPathAuthFragment extends Fragment {
         setLoading(true);
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(result -> {
-                    setLoading(false);
-                    notifyAuthSuccess();
+                    FirebaseUser user = result.getUser();
+                    if (user == null) {
+                        setLoading(false);
+                        showError(getString(R.string.travelpath_auth_error_profile_save));
+                        return;
+                    }
+
+                    userRepository.saveUserProfile(
+                            user.getUid(),
+                            user.getEmail(),
+                            "email_password",
+                            new TravelPathUserRepository.SaveCallback() {
+                                @Override
+                                public void onSuccess() {
+                                    setLoading(false);
+                                    notifyAuthSuccess();
+                                }
+
+                                @Override
+                                public void onError(@NonNull Exception exception) {
+                                    setLoading(false);
+                                    showError(getString(R.string.travelpath_auth_error_profile_save));
+                                }
+                            }
+                    );
                 })
                 .addOnFailureListener(e -> {
                     setLoading(false);
