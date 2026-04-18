@@ -7,7 +7,6 @@ import com.example.traveling.R;
 public class TravelShareItineraryFragment extends Fragment {
 
     public TravelShareItineraryFragment() {
-        super(R.layout.fragment_travelshare_itinerary);
+        super(R.layout.fragment_travelpath_main);
     }
 }
-

@@ -63,7 +63,7 @@ public class InMemoryTravelSharePostRepository implements TravelSharePostReposit
             )
     ));
 
-    private int nextId = 6;
+    private int nextGeneratedId = 6;
 
     @Override
     public List<TravelSharePost> getFeedPosts() {
@@ -100,29 +100,6 @@ public class InMemoryTravelSharePostRepository implements TravelSharePostReposit
     }
 
     @Override
-    public TravelSharePost createPost(
-            String authorName,
-            String locationName,
-            String description,
-            String period,
-            String howToGetThere
-    ) {
-        TravelSharePost newPost = new TravelSharePost(
-                String.valueOf(nextId++),
-                safe(authorName, "Voyageur"),
-                safe(locationName, "Lieu inconnu"),
-                safe(description, "Photo de voyage"),
-                safe(period, "Periode non precisee"),
-                safe(howToGetThere, "Infos transport a venir"),
-                0,
-                0
-        );
-
-        posts.add(0, newPost);
-        return newPost;
-    }
-
-    @Override
     public boolean toggleLike(String postId) {
         TravelSharePost post = getPostById(postId);
         if (post == null) {
@@ -155,10 +132,27 @@ public class InMemoryTravelSharePostRepository implements TravelSharePostReposit
         return post.getCommentCount();
     }
 
-    private String safe(String value, String fallback) {
-        if (value == null || value.trim().isEmpty()) {
-            return fallback;
-        }
-        return value.trim();
+    @Override
+    public TravelSharePost createPost(
+            String authorName,
+            String locationName,
+            String description,
+            String period,
+            String howToGetThere
+    ) {
+        TravelSharePost createdPost = new TravelSharePost(
+                String.valueOf(nextGeneratedId++),
+                authorName == null || authorName.trim().isEmpty() ? "Voyageur" : authorName.trim(),
+                locationName == null ? "" : locationName.trim(),
+                description == null ? "" : description.trim(),
+                period == null ? "" : period.trim(),
+                howToGetThere == null ? "" : howToGetThere.trim(),
+                0,
+                0
+        );
+
+        // Most recent publication appears first in the feed.
+        posts.add(0, createdPost);
+        return createdPost;
     }
 }

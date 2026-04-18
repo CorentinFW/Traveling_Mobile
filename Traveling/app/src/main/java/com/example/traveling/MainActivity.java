@@ -1,7 +1,6 @@
 package com.example.traveling;
 
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -13,20 +12,27 @@ import androidx.fragment.app.Fragment;
 
 import com.example.traveling.travelshare.data.TravelShareDataProvider;
 import com.example.traveling.travelshare.domain.TravelShareSessionRepository;
+import com.example.traveling.travelshare.ui.TravelShareAddPostFragment;
 import com.example.traveling.travelshare.ui.TravelShareAuthFragment;
+import com.example.traveling.travelshare.ui.TravelShareHomeFragment;
+import com.example.traveling.travelshare.ui.TravelShareItineraryFragment;
+import com.example.traveling.travelshare.ui.TravelShareMessagesFragment;
 import com.example.traveling.travelshare.ui.TravelSharePostDetailFragment;
 import com.example.traveling.travelshare.ui.TravelShareProfileFragment;
+import com.example.traveling.travelshare.ui.TravelShareSearchFragment;
 import com.example.traveling.travelshare.ui.navigation.TravelShareBottomNavConfig;
 import com.example.traveling.travelshare.ui.navigation.TravelShareNavItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private TravelShareSessionRepository sessionRepository;
     private Button sessionButton;
-    private final SparseArray<TravelShareNavItem> navItemRegistry = new SparseArray<>();
+    private final Map<Integer, TravelShareNavItem> navItemsById = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +53,16 @@ public class MainActivity extends AppCompatActivity {
         refreshSessionButton();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.travelshare_bottom_nav);
-        setupBottomNavigation(bottomNavigationView);
+        List<TravelShareNavItem> navItems = TravelShareBottomNavConfig.buildItems();
+        TravelShareBottomNavConfig.inflateMenu(bottomNavigationView, navItems);
+        navItemsById.clear();
+        for (TravelShareNavItem navItem : navItems) {
+            navItemsById.put(navItem.getItemId(), navItem);
+        }
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            return switchToTab(item.getItemId());
+            switchToTab(item.getItemId());
+            return true;
         });
 
         if (savedInstanceState == null) {
@@ -85,20 +98,10 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void setupBottomNavigation(BottomNavigationView bottomNavigationView) {
-        List<TravelShareNavItem> navItems = TravelShareBottomNavConfig.buildItems();
-        TravelShareBottomNavConfig.inflateMenu(bottomNavigationView, navItems);
-
-        navItemRegistry.clear();
-        for (TravelShareNavItem navItem : navItems) {
-            navItemRegistry.put(navItem.getItemId(), navItem);
-        }
-    }
-
-    private boolean switchToTab(int itemId) {
-        TravelShareNavItem navItem = navItemRegistry.get(itemId);
+    private void switchToTab(int itemId) {
+        TravelShareNavItem navItem = navItemsById.get(itemId);
         if (navItem == null) {
-            return false;
+            return;
         }
 
         Fragment fragment = navItem.createFragment();
@@ -107,7 +110,5 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.travelshare_fragment_container, fragment)
                 .commit();
-
-        return true;
     }
 }

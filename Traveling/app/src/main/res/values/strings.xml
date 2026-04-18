@@ -30,15 +30,16 @@
     <string name="travelshare_messages_placeholder">DM et groupes prives arrives a la prochaine etape.</string>
 
     <string name="travelshare_add_title">Ajouter un post</string>
-    <string name="travelshare_add_subtitle">Publie un nouveau souvenir de voyage</string>
-    <string name="travelshare_add_location_hint">Lieu</string>
-    <string name="travelshare_add_period_hint">Periode (ex: Ete 2026)</string>
+    <string name="travelshare_add_subtitle">Partage une photo de voyage avec la communaute</string>
+    <string name="travelshare_add_placeholder">Creation de post (photo, texte, tags) a la prochaine etape.</string>
+    <string name="travelshare_add_location_hint">Lieu (ex: Paris)</string>
+    <string name="travelshare_add_period_hint">Periode (ex: Printemps 2026)</string>
     <string name="travelshare_add_description_hint">Description</string>
     <string name="travelshare_add_how_to_hint">Comment y aller</string>
     <string name="travelshare_add_publish">Publier</string>
-    <string name="travelshare_add_need_login">Connecte-toi pour publier un post</string>
     <string name="travelshare_add_need_login_cta">Connexion requise</string>
-    <string name="travelshare_add_publish_success">Post publie dans ton feed</string>
+    <string name="travelshare_add_need_login">Connecte-toi pour publier un post</string>
+    <string name="travelshare_add_publish_success">Post publie</string>
 
     <string name="travelshare_itinerary_title">Itineraire</string>
     <string name="travelshare_itinerary_placeholder">Passerelle TravelPath a connecter en dernier.</string>

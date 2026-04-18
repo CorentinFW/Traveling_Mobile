@@ -5,4 +5,3 @@
         android:icon="@android:drawable/ic_dialog_email"
         android:title="@string/travelshare_nav_messages" />
 </menu>
-

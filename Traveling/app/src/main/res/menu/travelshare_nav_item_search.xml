@@ -5,4 +5,3 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/travelshare_nav_search" />
 </menu>
-

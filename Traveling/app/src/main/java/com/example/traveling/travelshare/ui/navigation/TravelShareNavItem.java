@@ -30,4 +30,3 @@ public class TravelShareNavItem {
         return fragmentCreator.create();
     }
 }
-

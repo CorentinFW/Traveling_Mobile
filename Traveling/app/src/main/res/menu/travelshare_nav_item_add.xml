@@ -5,4 +5,3 @@
         android:icon="@android:drawable/ic_input_add"
         android:title="@string/travelshare_nav_add" />
 </menu>
-
