@@ -268,6 +268,13 @@ public class TravelPathResultsFragment extends Fragment {
             });
             favoriteToggle.setOnClickListener(v -> updateSavedPlaceSelection(placeKey, place.getName(), favoriteToggle.isChecked()));
 
+            item.setOnClickListener(v -> {
+                Fragment parent = getParentFragment();
+                if (parent instanceof TravelPathMainFragment) {
+                    ((TravelPathMainFragment) parent).showPlaceDetailScreen(place);
+                }
+            });
+
             resultsContainer.addView(item);
         }
     }

@@ -155,16 +155,16 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
     @NonNull
     private List<TravelPathPlace> buildFallbackPlaces() {
         List<TravelPathPlace> fallback = new ArrayList<>();
-        fallback.add(new TravelPathPlace("Place de la Comedie", "Monument", null));
-        fallback.add(new TravelPathPlace("Promenade du Peyrou", "Loisir", null));
-        fallback.add(new TravelPathPlace("Musee Fabre", "Culture", null));
-        fallback.add(new TravelPathPlace("Jardin des Plantes", "Loisir", null));
-        fallback.add(new TravelPathPlace("Lez Market", "Shopping", null));
-        fallback.add(new TravelPathPlace("Halles Castellane", "Restaurant", null));
-        fallback.add(new TravelPathPlace("Opera Comedie", "Evenements", null));
-        fallback.add(new TravelPathPlace("Arc de Triomphe", "Monument", null));
-        fallback.add(new TravelPathPlace("MO.CO.", "Culture", null));
-        fallback.add(new TravelPathPlace("Antigone", "Shopping", null));
+        fallback.add(new TravelPathPlace("Place de la Comedie", "Monument", null, 43.6086, 3.8793));
+        fallback.add(new TravelPathPlace("Promenade du Peyrou", "Loisir", null, 43.6119, 3.8684));
+        fallback.add(new TravelPathPlace("Musee Fabre", "Culture", null, 43.6116, 3.8814));
+        fallback.add(new TravelPathPlace("Jardin des Plantes", "Loisir", null, 43.6160, 3.8702));
+        fallback.add(new TravelPathPlace("Lez Market", "Shopping", null, 43.6035, 3.8981));
+        fallback.add(new TravelPathPlace("Halles Castellane", "Restaurant", null, 43.6112, 3.8777));
+        fallback.add(new TravelPathPlace("Opera Comedie", "Evenements", null, 43.6088, 3.8796));
+        fallback.add(new TravelPathPlace("Arc de Triomphe", "Monument", null, 43.6113, 3.8700));
+        fallback.add(new TravelPathPlace("MO.CO.", "Culture", null, 43.6068, 3.8749));
+        fallback.add(new TravelPathPlace("Antigone", "Shopping", null, 43.6071, 3.8903));
         return fallback;
     }
 

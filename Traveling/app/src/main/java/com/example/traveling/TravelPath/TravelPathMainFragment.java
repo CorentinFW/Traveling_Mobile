@@ -1,5 +1,6 @@
 package com.example.traveling.TravelPath;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.traveling.MainActivity;
 import com.example.traveling.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -19,6 +21,9 @@ public class TravelPathMainFragment extends Fragment {
 
     private static final String KEY_CURRENT_SCREEN = "travelpath_current_screen";
     private static final String KEY_SCREEN_HISTORY = "travelpath_screen_history";
+    private static final String KEY_PLACE_DETAIL_NAME = "travelpath_place_detail_name";
+    private static final String KEY_PLACE_DETAIL_LAT = "travelpath_place_detail_lat";
+    private static final String KEY_PLACE_DETAIL_LNG = "travelpath_place_detail_lng";
     private static final int MAX_HISTORY_SIZE = 5;
 
     private enum Screen {
@@ -31,11 +36,14 @@ public class TravelPathMainFragment extends Fragment {
         EFFORT,
         SUMMARY,
         ITINERARY,
-        MY_ROUTES
+        MY_ROUTES,
+        PLACE_DETAIL
     }
 
     private final Deque<Screen> screenHistory = new ArrayDeque<>();
     private Screen currentScreen;
+    @Nullable
+    private TravelPathPlace currentDetailPlace;
 
     public TravelPathMainFragment() {
         super(R.layout.fragment_travelpath_main);
@@ -72,6 +80,16 @@ public class TravelPathMainFragment extends Fragment {
 
         if (currentScreen != null) {
             outState.putString(KEY_CURRENT_SCREEN, currentScreen.name());
+        }
+
+        if (currentDetailPlace != null) {
+            outState.putString(KEY_PLACE_DETAIL_NAME, currentDetailPlace.getName());
+            if (currentDetailPlace.getLatitude() != null) {
+                outState.putDouble(KEY_PLACE_DETAIL_LAT, currentDetailPlace.getLatitude());
+            }
+            if (currentDetailPlace.getLongitude() != null) {
+                outState.putDouble(KEY_PLACE_DETAIL_LNG, currentDetailPlace.getLongitude());
+            }
         }
 
         ArrayList<String> serializedHistory = new ArrayList<>();
@@ -125,8 +143,15 @@ public class TravelPathMainFragment extends Fragment {
         navigateToScreen(Screen.ITINERARY);
     }
 
+    public void showPlaceDetailScreen(@NonNull TravelPathPlace place) {
+        currentDetailPlace = place;
+        navigateToCustomScreen(Screen.PLACE_DETAIL, TravelPathPlaceDetailFragment.newInstance(place));
+    }
+
     private void goBackToMainActivityScreen() {
-        requireActivity().getSupportFragmentManager().popBackStack();
+        Intent intent = new Intent(requireContext(), MainActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
     private void navigateToPreviousInjectedScreen() {
@@ -142,6 +167,9 @@ public class TravelPathMainFragment extends Fragment {
 
         Screen previousScreen = screenHistory.removeLast();
         currentScreen = previousScreen;
+        if (currentScreen != Screen.PLACE_DETAIL) {
+            currentDetailPlace = null;
+        }
         replaceInjectedScreen(previousScreen);
     }
 
@@ -154,6 +182,10 @@ public class TravelPathMainFragment extends Fragment {
             return;
         }
 
+        if (targetScreen != Screen.PLACE_DETAIL) {
+            currentDetailPlace = null;
+        }
+
         if (currentScreen != null) {
             screenHistory.addLast(currentScreen);
             while (screenHistory.size() > MAX_HISTORY_SIZE) {
@@ -163,6 +195,25 @@ public class TravelPathMainFragment extends Fragment {
 
         currentScreen = targetScreen;
         replaceInjectedScreen(targetScreen);
+    }
+
+    private void navigateToCustomScreen(@NonNull Screen targetScreen, @NonNull Fragment targetFragment) {
+        if (targetScreen == currentScreen) {
+            return;
+        }
+
+        if (currentScreen != null) {
+            screenHistory.addLast(currentScreen);
+            while (screenHistory.size() > MAX_HISTORY_SIZE) {
+                screenHistory.removeFirst();
+            }
+        }
+
+        currentScreen = targetScreen;
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.travelpath_content_container, targetFragment)
+                .commit();
     }
 
     private void replaceInjectedScreen(@NonNull Screen screen) {
@@ -202,16 +253,33 @@ public class TravelPathMainFragment extends Fragment {
         if (screen == Screen.MY_ROUTES) {
             return new TravelPathMyRoutesFragment();
         }
+        if (screen == Screen.PLACE_DETAIL) {
+            if (currentDetailPlace != null) {
+                return TravelPathPlaceDetailFragment.newInstance(currentDetailPlace);
+            }
+            return new TravelPathPlaceDetailFragment();
+        }
         return new TravelPathWelcomeFragment();
     }
 
     private void restoreNavigationState(@NonNull Bundle savedInstanceState) {
         String currentScreenName = savedInstanceState.getString(KEY_CURRENT_SCREEN, Screen.WELCOME.name());
         currentScreen = parseScreen(currentScreenName, Screen.WELCOME);
+        String detailName = savedInstanceState.getString(KEY_PLACE_DETAIL_NAME, "");
+        if (!detailName.isEmpty()) {
+            Double detailLat = savedInstanceState.containsKey(KEY_PLACE_DETAIL_LAT)
+                    ? savedInstanceState.getDouble(KEY_PLACE_DETAIL_LAT)
+                    : null;
+            Double detailLng = savedInstanceState.containsKey(KEY_PLACE_DETAIL_LNG)
+                    ? savedInstanceState.getDouble(KEY_PLACE_DETAIL_LNG)
+                    : null;
+            currentDetailPlace = new TravelPathPlace(detailName, "", null, detailLat, detailLng);
+        }
 
         if (!isUserAuthenticated()) {
             currentScreen = Screen.AUTH;
             screenHistory.clear();
+            currentDetailPlace = null;
             return;
         }
 
