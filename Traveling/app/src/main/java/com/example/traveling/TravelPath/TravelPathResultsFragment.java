@@ -1,9 +1,12 @@
 package com.example.traveling.TravelPath;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,10 +27,19 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class TravelPathResultsFragment extends Fragment {
+
+    private static final String PREFS_NAME = "travelpath_results_state";
+    private static final String KEY_SELECTED_PLACE_KEYS = "selected_place_keys";
+    private static final String KEY_SELECTED_PLACE_ENTRIES = "selected_place_entries";
+    private static final String ENTRY_SEPARATOR = "::";
 
     private GoogleMap googleMap;
     private TravelPathPlaceDataSource placeRepository = new TravelPathPlaceRepository();
@@ -41,6 +53,8 @@ public class TravelPathResultsFragment extends Fragment {
     private boolean mapEnabled = true;
     private String currentQuery = "";
     private List<TravelPathPlace> sourcePlaces = new ArrayList<>();
+    private Set<String> selectedPlaceKeys = new HashSet<>();
+    private Map<String, String> selectedPlaceLabelsByKey = new HashMap<>();
 
     public TravelPathResultsFragment() {
         super(R.layout.fragment_travelpath_results);
@@ -55,6 +69,8 @@ public class TravelPathResultsFragment extends Fragment {
         filterSpinner = view.findViewById(R.id.travelpath_filter_spinner);
         sortSpinner = view.findViewById(R.id.travelpath_sort_spinner);
         searchView = view.findViewById(R.id.travelpath_search_view);
+        selectedPlaceKeys = new HashSet<>(getPreferences().getStringSet(KEY_SELECTED_PLACE_KEYS, new HashSet<>()));
+        selectedPlaceLabelsByKey = readSelectedPlaceEntries();
 
         if (mapEnabled) {
             setupMap();
@@ -236,11 +252,76 @@ public class TravelPathResultsFragment extends Fragment {
             TextView title = item.findViewById(R.id.travelpath_result_title);
             TextView theme = item.findViewById(R.id.travelpath_result_theme);
             TextView location = item.findViewById(R.id.travelpath_result_location);
+            LinearLayout addContainer = item.findViewById(R.id.travelpath_result_add_container);
+            CheckBox favoriteToggle = item.findViewById(R.id.travelpath_result_favorite_toggle);
             title.setText(place.getName());
             theme.setText(getString(R.string.travelpath_result_theme_format, place.getTheme()));
             location.setText(getString(R.string.travelpath_result_location_value));
+
+            String placeKey = buildSavedPlaceKey(place);
+            favoriteToggle.setChecked(selectedPlaceKeys.contains(placeKey));
+
+            addContainer.setOnClickListener(v -> {
+                boolean nextCheckedState = !favoriteToggle.isChecked();
+                favoriteToggle.setChecked(nextCheckedState);
+                updateSavedPlaceSelection(placeKey, place.getName(), nextCheckedState);
+            });
+            favoriteToggle.setOnClickListener(v -> updateSavedPlaceSelection(placeKey, place.getName(), favoriteToggle.isChecked()));
+
             resultsContainer.addView(item);
         }
+    }
+
+    private void updateSavedPlaceSelection(@NonNull String placeKey, @NonNull String placeName, boolean isSelected) {
+        if (isSelected) {
+            selectedPlaceKeys.add(placeKey);
+            selectedPlaceLabelsByKey.put(placeKey, placeName);
+        } else {
+            selectedPlaceKeys.remove(placeKey);
+            selectedPlaceLabelsByKey.remove(placeKey);
+        }
+        getPreferences().edit()
+                .putStringSet(KEY_SELECTED_PLACE_KEYS, new HashSet<>(selectedPlaceKeys))
+                .putStringSet(KEY_SELECTED_PLACE_ENTRIES, serializeSelectedPlaceEntries())
+                .apply();
+    }
+
+    @NonNull
+    private Map<String, String> readSelectedPlaceEntries() {
+        Set<String> rawEntries = getPreferences().getStringSet(KEY_SELECTED_PLACE_ENTRIES, new HashSet<>());
+        Map<String, String> entries = new HashMap<>();
+        for (String rawEntry : rawEntries) {
+            int separatorIndex = rawEntry.indexOf(ENTRY_SEPARATOR);
+            if (separatorIndex <= 0 || separatorIndex >= rawEntry.length() - ENTRY_SEPARATOR.length()) {
+                continue;
+            }
+            String key = rawEntry.substring(0, separatorIndex);
+            String label = rawEntry.substring(separatorIndex + ENTRY_SEPARATOR.length());
+            if (!key.isEmpty() && !label.isEmpty()) {
+                entries.put(key, label);
+            }
+        }
+        return entries;
+    }
+
+    @NonNull
+    private Set<String> serializeSelectedPlaceEntries() {
+        Set<String> serializedEntries = new HashSet<>();
+        for (Map.Entry<String, String> entry : selectedPlaceLabelsByKey.entrySet()) {
+            serializedEntries.add(entry.getKey() + ENTRY_SEPARATOR + entry.getValue());
+        }
+        return serializedEntries;
+    }
+
+    @NonNull
+    private String buildSavedPlaceKey(@NonNull TravelPathPlace place) {
+        return normalizeText(place.getName()) + "|" + normalizeText(place.getTheme());
+    }
+
+    @NonNull
+    private SharedPreferences getPreferences() {
+        Context context = requireContext().getApplicationContext();
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     private void applyFilterAndSortAndRender() {

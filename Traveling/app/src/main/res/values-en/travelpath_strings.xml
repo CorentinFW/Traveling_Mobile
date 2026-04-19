@@ -31,6 +31,8 @@
     <string name="travelpath_route_type_title">Route type</string>
     <string name="travelpath_summary_arrow">></string>
     <string name="travelpath_selected_place">Selected place</string>
+    <string name="travelpath_selected_places_dialog_title">Selected places</string>
+    <string name="travelpath_selected_places_empty">No selected place</string>
     <string name="travelpath_preferences">Preferences</string>
     <string name="travelpath_auth_title">TravelPath sign in</string>
     <string name="travelpath_auth_subtitle">Sign in to save your routes</string>

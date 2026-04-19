@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.traveling.R;
@@ -44,6 +46,11 @@ public class TravelPathSummaryFragment extends Fragment {
     private static final String PREFS_SUMMARY = "travelpath_summary_state";
     private static final String KEY_ROUTE_TYPE_POSITION = "route_type_position";
 
+    private static final String PREFS_RESULTS = "travelpath_results_state";
+    private static final String KEY_SELECTED_PLACE_KEYS = "selected_place_keys";
+    private static final String KEY_SELECTED_PLACE_ENTRIES = "selected_place_entries";
+    private static final String ENTRY_SEPARATOR = "::";
+
     private final TravelPathRouteRepository routeRepository = new TravelPathRouteRepository();
 
     private TextView activitiesValue;
@@ -63,6 +70,7 @@ public class TravelPathSummaryFragment extends Fragment {
         bindViews(view);
         restoreRouteTypeSelection();
         renderSummaryValues();
+        setupSelectedPlaceButton(view);
         setupContinueButton(view);
     }
 
@@ -191,6 +199,65 @@ public class TravelPathSummaryFragment extends Fragment {
             saveRouteTypeSelection();
             saveCurrentRouteToFirestoreAndContinue();
         });
+    }
+
+    private void setupSelectedPlaceButton(@NonNull View rootView) {
+        LinearLayout selectedPlaceButton = rootView.findViewById(R.id.travelpath_selected_place_button);
+        selectedPlaceButton.setOnClickListener(v -> showSelectedPlacesDialog());
+    }
+
+    private void showSelectedPlacesDialog() {
+        List<String> selectedPlaces = readSelectedPlaceLabels();
+        if (selectedPlaces.isEmpty()) {
+            Toast.makeText(requireContext(), R.string.travelpath_selected_places_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        StringBuilder messageBuilder = new StringBuilder();
+        for (int i = 0; i < selectedPlaces.size(); i++) {
+            if (i > 0) {
+                messageBuilder.append("\n");
+            }
+            messageBuilder.append("- ").append(selectedPlaces.get(i));
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.travelpath_selected_places_dialog_title)
+                .setMessage(messageBuilder.toString())
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
+    @NonNull
+    private List<String> readSelectedPlaceLabels() {
+        SharedPreferences resultsPrefs = getPreferences(PREFS_RESULTS);
+        Set<String> rawEntries = resultsPrefs.getStringSet(KEY_SELECTED_PLACE_ENTRIES, new HashSet<>());
+        List<String> labels = new ArrayList<>();
+
+        for (String rawEntry : rawEntries) {
+            int separatorIndex = rawEntry.indexOf(ENTRY_SEPARATOR);
+            if (separatorIndex <= 0 || separatorIndex >= rawEntry.length() - ENTRY_SEPARATOR.length()) {
+                continue;
+            }
+            String label = rawEntry.substring(separatorIndex + ENTRY_SEPARATOR.length()).trim();
+            if (!label.isEmpty()) {
+                labels.add(label);
+            }
+        }
+
+        if (!labels.isEmpty()) {
+            return labels;
+        }
+
+        // Compatibilite avec les sauvegardes plus anciennes: on tente au moins d'afficher une liste.
+        Set<String> legacyKeys = resultsPrefs.getStringSet(KEY_SELECTED_PLACE_KEYS, new HashSet<>());
+        for (String legacyKey : legacyKeys) {
+            if (legacyKey == null || legacyKey.trim().isEmpty()) {
+                continue;
+            }
+            labels.add(legacyKey);
+        }
+        return labels;
     }
 
     private void saveCurrentRouteToFirestoreAndContinue() {

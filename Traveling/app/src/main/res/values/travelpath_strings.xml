@@ -31,6 +31,8 @@
     <string name="travelpath_route_type_title">Type de parcours</string>
     <string name="travelpath_summary_arrow">></string>
     <string name="travelpath_selected_place">Lieu selectionne</string>
+    <string name="travelpath_selected_places_dialog_title">Lieux selectionnes</string>
+    <string name="travelpath_selected_places_empty">Aucun lieu selectionne</string>
     <string name="travelpath_preferences">Preferences</string>
     <string name="travelpath_auth_title">Connexion TravelPath</string>
     <string name="travelpath_auth_subtitle">Connectez-vous pour sauvegarder vos parcours</string>
