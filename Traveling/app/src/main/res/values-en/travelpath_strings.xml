@@ -14,35 +14,42 @@
     <string name="travelpath_accordion_follow_content">Follow and share your favorite routes anytime!</string>
     <string name="travelpath_start">Start</string>
     <string name="travelpath_continue">Continue</string>
+    <string name="travelpath_new_route">New route</string>
+    <string name="travelpath_my_routes_title">My routes</string>
+    <string name="travelpath_place_detail_title">Place name</string>
+    <string name="travelpath_place_map">Place map</string>
     <string name="travelpath_generate_route">Generate my route</string>
-    <string name="travelpath_progress_zero">0%</string>
-    <string name="travelpath_category_restaurant">Restaurant</string>
-    <string name="travelpath_category_culture">Culture</string>
-    <string name="travelpath_category_monument">Monument</string>
-    <string name="travelpath_category_leisure">Leisure</string>
-    <string name="travelpath_category_shopping">Shopping</string>
-    <string name="travelpath_category_events">Events</string>
-    <string name="travelpath_search_hint">Search for a place or activity</string>
-    <string name="travelpath_results_count_placeholder">X results</string>
-    <string name="travelpath_map">Map</string>
-    <string name="travelpath_result_image">Place image</string>
-    <string name="travelpath_result_place_name_placeholder">Place name</string>
-    <string name="travelpath_result_add">Add</string>
-    <string name="travelpath_result_favorite">Favorite</string>
+    <string name="travelpath_summary_title">Summary</string>
+    <string name="travelpath_summary_activities">Activities:</string>
+    <string name="travelpath_summary_activities_placeholder">Restaurant, Leisure</string>
+    <string name="travelpath_summary_budget">Budget:</string>
+    <string name="travelpath_summary_budget_placeholder">200-500 EUR</string>
+    <string name="travelpath_summary_duration">Duration:</string>
+    <string name="travelpath_summary_duration_placeholder">Full day, 21/04/2026</string>
+    <string name="travelpath_summary_effort">Effort:</string>
+    <string name="travelpath_summary_effort_placeholder">Medium</string>
+    <string name="travelpath_route_type_title">Route type</string>
+    <string name="travelpath_summary_arrow">></string>
+    <string name="travelpath_selected_place">Selected place</string>
+    <string name="travelpath_preferences">Preferences</string>
+    <string name="travelpath_auth_title">TravelPath sign in</string>
+    <string name="travelpath_auth_subtitle">Sign in to save your routes</string>
+    <string name="travelpath_auth_anonymous">Continue without account</string>
+    <string name="travelpath_auth_email_hint">Email</string>
+    <string name="travelpath_auth_password_hint">Password</string>
+    <string name="travelpath_auth_sign_in">Sign in</string>
+    <string name="travelpath_auth_create_account">Create account</string>
+    <string name="travelpath_auth_google">Continue with Google</string>
     <string name="travelpath_visit_duration_title">Visit duration</string>
     <string name="travelpath_duration_half_day">Half-day</string>
     <string name="travelpath_duration_full_day">Full day</string>
-    <string name="travelpath_duration_multiple_days">Several days</string>
+    <string name="travelpath_duration_multiple_days">Multiple days</string>
     <string name="travelpath_days_input_hint">Number of days</string>
     <string name="travelpath_visit_start_title">Visit start</string>
-    <string name="travelpath_budget_min_label">Min:</string>
-    <string name="travelpath_budget_max_label">Max:</string>
-    <string name="travelpath_budget_currency">€</string>
     <string name="travelpath_visit_date_title">Visit date</string>
+    <string name="travelpath_budget_min_label">Min</string>
+    <string name="travelpath_budget_max_label">Max</string>
     <string name="travelpath_effort_title">Effort level</string>
-    <string name="travelpath_effort_low">Low</string>
-    <string name="travelpath_effort_medium">Medium</string>
-    <string name="travelpath_effort_high">High</string>
     <string name="travelpath_adult_count">Number of adults</string>
     <string name="travelpath_children_count">Number of children</string>
     <string name="travelpath_count_hint">0</string>
@@ -52,73 +59,79 @@
     <string name="travelpath_sensitive_cold">Sensitive to cold</string>
     <string name="travelpath_sensitive_heat">Sensitive to heat</string>
     <string name="travelpath_sensitive_humidity">Sensitive to humidity</string>
-    <string name="travelpath_summary_title">Summary</string>
-    <string name="travelpath_summary_activities">Activities:</string>
-    <string name="travelpath_summary_budget">Budget:</string>
-    <string name="travelpath_summary_duration">Duration:</string>
-    <string name="travelpath_summary_effort">Effort:</string>
-    <string name="travelpath_summary_activities_placeholder">Restaurant, Leisure</string>
-    <string name="travelpath_summary_budget_placeholder">200-500€</string>
-    <string name="travelpath_summary_duration_placeholder">Full day, 04/21/2026</string>
-    <string name="travelpath_summary_effort_placeholder">Medium</string>
-    <string name="travelpath_route_type_title">Route type</string>
-    <string name="travelpath_selected_place">Selected place</string>
-    <string name="travelpath_preferences">Preferences</string>
-    <string name="travelpath_summary_arrow">Arrow</string>
-    <string name="travelpath_itinerary_title">Itinerary</string>
     <string name="travelpath_save">Save</string>
     <string name="travelpath_recalculate">Recalculate</string>
     <string name="travelpath_export">Export</string>
     <string name="travelpath_share">Share</string>
-    <string name="travelpath_route_name_title">Route name</string>
-    <string name="travelpath_itinerary_map">Itinerary map</string>
-    <string name="travelpath_itinerary_budget_placeholder">X€</string>
+    <string name="travelpath_itinerary_budget_placeholder">X EUR</string>
     <string name="travelpath_itinerary_days_placeholder">Y days</string>
     <string name="travelpath_itinerary_effort_placeholder">Medium</string>
-    <string name="travelpath_my_routes_title">My routes</string>
-    <string name="travelpath_new_route">New route</string>
-    <string name="travelpath_my_route_image">Route image</string>
+    <string name="travelpath_itinerary_map">Itinerary map</string>
+    <string name="travelpath_itinerary_title">Itinerary</string>
+    <string name="travelpath_route_name_title">Route name</string>
+    <string name="travelpath_progress_zero">0%</string>
+    <string name="travelpath_budget_currency">EUR</string>
+    <string name="travelpath_effort_low">Low</string>
+    <string name="travelpath_effort_medium">Medium</string>
+    <string name="travelpath_effort_high">High</string>
+    <string name="travelpath_category_restaurant">Restaurant</string>
+    <string name="travelpath_category_culture">Culture</string>
+    <string name="travelpath_category_monument">Monument</string>
+    <string name="travelpath_category_leisure">Leisure</string>
+    <string name="travelpath_category_shopping">Shopping</string>
+    <string name="travelpath_category_events">Events</string>
+    <string name="travelpath_search_hint">Search for a place or activity</string>
+    <string name="travelpath_refresh">Refresh</string>
+    <string name="travelpath_results_count_placeholder">X results</string>
+    <string name="travelpath_results_loading">Loading results...</string>
+    <string name="travelpath_results_searching">Searching...</string>
+    <string name="travelpath_results_load_error">Unable to load results</string>
+    <string name="travelpath_results_no_match">No results for "%1$s"</string>
+    <string name="travelpath_results_count_format">%1$d results</string>
+    <string name="travelpath_map">Map</string>
+    <string name="travelpath_result_image">Place image</string>
+    <string name="travelpath_result_place_name_placeholder">Place name</string>
+    <string name="travelpath_result_theme_placeholder">Theme: Culture</string>
+    <string name="travelpath_result_theme_format">Theme: %1$s</string>
+    <string name="travelpath_result_location_placeholder">Montpellier, France</string>
+    <string name="travelpath_result_location_value">Montpellier, France</string>
+    <string name="travelpath_result_add">Add</string>
+    <string name="travelpath_result_favorite">Favorite</string>
+    <string name="travelpath_db_route_saved">Route saved</string>
+    <string name="travelpath_db_route_save_error">Failed to save route</string>
+    <string name="travelpath_route_default_name_no_date">Custom route</string>
+    <string name="travelpath_route_default_name_format">Route of %1$s</string>
+    <string name="travelpath_db_auth_required">Sign in required to view your routes</string>
+    <string name="travelpath_db_loading_routes">Loading routes...</string>
+    <string name="travelpath_db_load_error">Unable to load routes</string>
+    <string name="travelpath_db_no_routes">No saved routes</string>
     <string name="travelpath_my_route_name_placeholder">Route name</string>
-    <string name="travelpath_my_route_budget_placeholder">X€</string>
-    <string name="travelpath_my_route_days_placeholder">Y days</string>
+    <string name="travelpath_my_route_image">Route image</string>
+    <string name="travelpath_my_route_budget_placeholder">X EUR</string>
+    <string name="travelpath_my_route_days_placeholder">0 day</string>
     <string name="travelpath_my_route_effort_placeholder">Medium</string>
-    <string name="travelpath_my_route_places_placeholder">Place name, Place name,...</string>
+    <string name="travelpath_my_route_places_placeholder">Place name</string>
     <string name="travelpath_step_index_placeholder">1.</string>
     <string name="travelpath_step_place_placeholder">Place name</string>
     <string name="travelpath_step_meta_placeholder">Xm | Y min | Z</string>
-    <string name="travelpath_step_star">Star</string>
-    <string name="travelpath_place_detail_title">Place name</string>
-    <string name="travelpath_place_map">Place map</string>
+    <string name="travelpath_step_star">★</string>
+    <string name="travelpath_auth_success">Signed in successfully</string>
+    <string name="travelpath_auth_error_google_cancelled">Google sign-in cancelled</string>
+    <string name="travelpath_auth_error_profile_save">Profile could not be saved to database</string>
+    <string name="travelpath_auth_error_missing_google_token">Missing Google token</string>
+    <string name="travelpath_auth_error_google_failed">Google sign-in failed</string>
+    <string name="travelpath_auth_error_missing_credentials">Please enter email and password</string>
+    <string name="travelpath_auth_error_password_short">Password must be at least 6 characters long</string>
+    <string name="travelpath_auth_error_email_already_used">This email is already used</string>
+    <string name="travelpath_auth_error_user_not_found">User not found</string>
+    <string name="travelpath_auth_error_invalid_credentials">Invalid credentials</string>
+    <string name="travelpath_auth_error_network">Network error, please try again</string>
+    <string name="travelpath_auth_error_generic">Authentication error</string>
 
-    <string name="travelpath_auth_title">TravelPath Sign In</string>
-    <string name="travelpath_auth_subtitle">Sign in to save and find your routes.</string>
-    <string name="travelpath_auth_anonymous">Continue anonymously</string>
-    <string name="travelpath_auth_email_hint">Email address</string>
-    <string name="travelpath_auth_password_hint">Password</string>
-    <string name="travelpath_auth_sign_in">Sign in</string>
-    <string name="travelpath_auth_create_account">Create account</string>
-    <string name="travelpath_auth_google">Continue with Google</string>
-    <string name="travelpath_auth_success">Signed in successfully.</string>
-    <string name="travelpath_auth_error_missing_credentials">Please enter an email and a password.</string>
-    <string name="travelpath_auth_error_password_short">Password must be at least 6 characters.</string>
-    <string name="travelpath_auth_error_invalid_credentials">Invalid credentials.</string>
-    <string name="travelpath_auth_error_user_not_found">No account found for this email.</string>
-    <string name="travelpath_auth_error_email_already_used">This email is already used.</string>
-    <string name="travelpath_auth_error_network">Network issue, please retry.</string>
-    <string name="travelpath_auth_error_missing_google_token">Missing Google token.</string>
-    <string name="travelpath_auth_error_google_failed">Google sign-in failed.</string>
-    <string name="travelpath_auth_error_google_cancelled">Google sign-in cancelled.</string>
-    <string name="travelpath_auth_error_profile_save">Account created, but profile could not be saved to the database.</string>
-    <string name="travelpath_auth_error_generic">An error occurred, please try again.</string>
-
-    <string name="travelpath_db_route_saved">Route saved to Firebase.</string>
-    <string name="travelpath_db_route_save_error">Unable to save route to Firebase right now.</string>
-    <string name="travelpath_db_loading_routes">Loading your routes...</string>
-    <string name="travelpath_db_no_routes">No saved routes yet.</string>
-    <string name="travelpath_db_load_error">Unable to load your routes.</string>
-    <string name="travelpath_db_auth_required">Sign in to view your routes.</string>
-    <string name="travelpath_route_default_name_no_date">My route</string>
-    <string name="travelpath_route_default_name_format">Route %1$s</string>
+    <string-array name="travelpath_visit_start_options">
+        <item>Morning</item>
+        <item>Noon</item>
+    </string-array>
 
     <string-array name="travelpath_route_type_options">
         <item>Simple</item>
@@ -126,23 +139,23 @@
         <item>Any</item>
     </string-array>
 
-    <string-array name="travelpath_visit_start_options">
-        <item>Morning</item>
-        <item>Noon</item>
-    </string-array>
-
     <string-array name="travelpath_filter_placeholders">
         <item>Filter</item>
-        <item>Filter placeholder 1</item>
-        <item>Filter placeholder 2</item>
-        <item>Filter placeholder 3</item>
+        <item>All themes</item>
+        <item>Restaurant</item>
+        <item>Culture</item>
+        <item>Monument</item>
+        <item>Leisure</item>
+        <item>Shopping</item>
+        <item>Events</item>
     </string-array>
 
     <string-array name="travelpath_sort_placeholders">
         <item>Sort</item>
-        <item>Sort placeholder 1</item>
-        <item>Sort placeholder 2</item>
-        <item>Sort placeholder 3</item>
+        <item>Name (A-Z)</item>
+        <item>Name (Z-A)</item>
+        <item>Theme (A-Z)</item>
+        <item>Theme (Z-A)</item>
     </string-array>
 </resources>
 

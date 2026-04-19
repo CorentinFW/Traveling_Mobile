@@ -30,18 +30,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/travelpath_map_container"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="180dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="@string/travelpath_map"
         app:layout_constraintBottom_toTopOf="@id/travelpath_progress_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <ScrollView
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/travelpath_map_fragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/travelpath_map" />
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/travelpath_results_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -55,11 +62,8 @@
             android:id="@+id/travelpath_results_injection_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <include layout="@layout/item_travelpath_result" />
-        </LinearLayout>
-    </ScrollView>
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/travelpath_filters_row"
@@ -96,11 +100,22 @@
             android:paddingEnd="12dp"
             android:spinnerMode="dropdown" />
 
+        <ImageButton
+            android:id="@+id/travelpath_refresh_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/travelpath_accordion_background"
+            android:contentDescription="@string/travelpath_refresh"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_popup_sync"
+            app:tint="#111827" />
+
         <TextView
             android:id="@+id/travelpath_results_count"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:gravity="end"
             android:text="@string/travelpath_results_count_placeholder"
