@@ -14,6 +14,7 @@ import com.example.traveling.MainActivity;
 import com.example.traveling.R;
 import com.example.traveling.travelshare.data.TravelShareDataProvider;
 import com.example.traveling.travelshare.domain.TravelShareSessionRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class TravelShareProfileFragment extends Fragment {
 
@@ -33,6 +34,7 @@ public class TravelShareProfileFragment extends Fragment {
         nameView.setText(sessionRepository.getDisplayName());
 
         logoutButton.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
             sessionRepository.logout();
 
             if (getActivity() instanceof MainActivity) {

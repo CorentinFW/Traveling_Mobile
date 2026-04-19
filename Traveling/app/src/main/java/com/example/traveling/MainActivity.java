@@ -20,10 +20,13 @@ import com.example.traveling.travelshare.ui.TravelShareHomeFragment;
 import com.example.traveling.travelshare.ui.TravelShareItineraryFragment;
 import com.example.traveling.travelshare.ui.TravelShareMessagesFragment;
 import com.example.traveling.travelshare.ui.TravelSharePostDetailFragment;
+import com.example.traveling.travelshare.ui.TravelShareProfileFragment;
 import com.example.traveling.travelshare.ui.TravelShareSearchFragment;
 import com.example.traveling.travelshare.ui.navigation.TravelShareBottomNavConfig;
 import com.example.traveling.travelshare.ui.navigation.TravelShareNavItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -72,11 +75,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refreshSessionButton() {
+        syncTravelShareSessionWithFirebaseAuth();
         if (sessionRepository.isAuthenticated()) {
             sessionButton.setText(R.string.travelshare_auth_profile);
         } else {
             sessionButton.setText(R.string.travelshare_auth_login);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshSessionButton();
     }
 
     public void openPostDetail(String postId) {
@@ -88,13 +98,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSessionScreen() {
-        Fragment fragment = new TravelPathAuthFragment();
+        syncTravelShareSessionWithFirebaseAuth();
+        Fragment fragment = sessionRepository.isAuthenticated()
+                ? new TravelShareProfileFragment()
+                : new TravelPathAuthFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.travelshare_fragment_container, fragment)
                 .addToBackStack("session")
                 .commit();
+    }
+
+    private void syncTravelShareSessionWithFirebaseAuth() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null || sessionRepository.isAuthenticated()) {
+            return;
+        }
+
+        String displayName = firebaseUser.getDisplayName();
+        if (displayName == null || displayName.trim().isEmpty()) {
+            displayName = firebaseUser.getEmail();
+        }
+        if (displayName == null || displayName.trim().isEmpty()) {
+            displayName = "Voyageur";
+        }
+
+        sessionRepository.login(displayName);
     }
 
     private void switchToTab(int itemId) {
