@@ -1,0 +1,13 @@
+Plan de travail actuel
+
+Etape 1
+- Utiliser la base Firebase existante comme source de donnees de reference.
+- Creer 5 utilisateurs fictifs en brut.
+- Donner 3 posts a chacun de ces 5 utilisateurs dans leur profil.
+- Limiter les messages prives aux amis uniquement.
+- Definir 3 amis parmi les 5 utilisateurs pour alimenter la partie messages.
+
+Etape 2
+- En attente des prochaines consignes.
+- Cette partie sera detaillee en plusieurs sous-etapes quand les ameliorations seront definies.
+

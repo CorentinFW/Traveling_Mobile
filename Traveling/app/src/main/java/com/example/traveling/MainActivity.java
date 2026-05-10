@@ -3,6 +3,7 @@ package com.example.traveling;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.example.traveling.travelshare.ui.TravelShareAuthFragment;
 import com.example.traveling.travelshare.ui.TravelShareHomeFragment;
 import com.example.traveling.travelshare.ui.TravelShareItineraryFragment;
 import com.example.traveling.travelshare.ui.TravelShareMessagesFragment;
+import com.example.traveling.travelshare.ui.TravelShareNotificationsFragment;
 import com.example.traveling.travelshare.ui.TravelSharePostDetailFragment;
 import com.example.traveling.travelshare.ui.TravelShareProfileFragment;
 import com.example.traveling.travelshare.ui.TravelShareSearchFragment;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TravelShareSessionRepository sessionRepository;
     private Button sessionButton;
+    private ImageButton notificationsButton;
     private final Map<Integer, TravelShareNavItem> navItemsById = new HashMap<>();
 
     @Override
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         sessionRepository = TravelShareDataProvider.sessionRepository();
         sessionButton = findViewById(R.id.travelshare_session_button);
+        notificationsButton = findViewById(R.id.travelshare_notifications_button);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         sessionButton.setOnClickListener(v -> openSessionScreen());
+        notificationsButton.setOnClickListener(v -> openNotificationsScreen());
         refreshSessionButton();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.travelshare_bottom_nav);
@@ -107,6 +112,14 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.travelshare_fragment_container, fragment)
                 .addToBackStack("session")
+                .commit();
+    }
+
+    private void openNotificationsScreen() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.travelshare_fragment_container, new TravelShareNotificationsFragment())
+                .addToBackStack("notifications")
                 .commit();
     }
 

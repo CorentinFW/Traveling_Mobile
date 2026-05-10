@@ -2,8 +2,8 @@ package com.example.traveling.travelshare.ui;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +15,6 @@ import com.example.traveling.travelshare.data.TravelShareDataProvider;
 import com.example.traveling.travelshare.domain.TravelSharePost;
 import com.example.traveling.travelshare.domain.TravelSharePostRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TravelShareHomeFragment extends Fragment {
@@ -29,20 +28,15 @@ public class TravelShareHomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ListView listView = view.findViewById(R.id.travelshare_home_list);
+        TextView emptyView = view.findViewById(android.R.id.empty);
         TravelSharePostRepository postRepository = TravelShareDataProvider.postRepository();
         List<TravelSharePost> posts = postRepository.getFeedPosts();
 
-        List<String> rows = new ArrayList<>();
-        for (TravelSharePost post : posts) {
-            rows.add(buildPostPreview(post));
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                rows
-        );
+        TravelSharePostAdapter adapter = new TravelSharePostAdapter(requireContext(), posts);
         listView.setAdapter(adapter);
+        listView.setDivider(null);
+        listView.setDividerHeight(0);
+        listView.setEmptyView(emptyView);
 
         listView.setOnItemClickListener((parent, itemView, position, id) -> {
             TravelSharePost selectedPost = posts.get(position);
@@ -50,11 +44,5 @@ public class TravelShareHomeFragment extends Fragment {
                 ((MainActivity) getActivity()).openPostDetail(selectedPost.getId());
             }
         });
-    }
-
-    private String buildPostPreview(TravelSharePost post) {
-        return post.getAuthorName() + " - " + post.getLocationName()
-                + "\n" + post.getDescription()
-                + "\n" + getString(R.string.travelshare_post_social_preview, post.getLikeCount(), post.getCommentCount());
     }
 }

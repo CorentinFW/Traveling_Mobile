@@ -55,6 +55,7 @@ public class TravelSharePostDetailFragment extends Fragment {
         }
 
         TextView title = view.findViewById(R.id.travelshare_detail_title);
+        TextView author = view.findViewById(R.id.travelshare_detail_author);
         TextView description = view.findViewById(R.id.travelshare_detail_description);
         TextView period = view.findViewById(R.id.travelshare_detail_period);
         TextView howTo = view.findViewById(R.id.travelshare_detail_how_to);
@@ -64,7 +65,8 @@ public class TravelSharePostDetailFragment extends Fragment {
         Button reportButton = view.findViewById(R.id.travelshare_detail_report_button);
         Button commentButton = view.findViewById(R.id.travelshare_detail_comment_button);
 
-        title.setText(getString(R.string.travelshare_post_title_format, post.getAuthorName(), post.getLocationName()));
+        author.setText(getString(R.string.travelshare_post_author_format, post.getAuthorName()));
+        title.setText(post.getLocationName());
         description.setText(post.getDescription());
         period.setText(getString(R.string.travelshare_post_period_format, post.getPeriod()));
         howTo.setText(getString(R.string.travelshare_post_how_to_format, post.getHowToGetThere()));
@@ -93,6 +95,11 @@ public class TravelSharePostDetailFragment extends Fragment {
             }
 
             String commentText = commentInput.getText().toString();
+            if (commentText.trim().isEmpty()) {
+                Toast.makeText(requireContext(), R.string.travelshare_comment_empty, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             int commentCount = postRepository.addComment(postId, commentText);
             commentInput.setText("");
             refreshButtons(post, social, likeButton, commentInput, commentButton, sessionRepository);

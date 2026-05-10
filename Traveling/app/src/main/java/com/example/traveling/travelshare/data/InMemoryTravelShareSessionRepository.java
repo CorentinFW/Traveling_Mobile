@@ -33,6 +33,7 @@ public class InMemoryTravelShareSessionRepository implements TravelShareSessionR
     @Override
     public void logout() {
         authenticated = false;
+        displayName = "Voyageur";
     }
 }
 

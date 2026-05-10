@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">Traveling</string>
 
     <string name="travelshare_nav_home">Home</string>
@@ -20,10 +20,11 @@
 
     <string name="travelshare_home_title">TravelShare</string>
     <string name="travelshare_home_subtitle">Decouverte de posts de voyage (mock)</string>
+    <string name="travelshare_home_empty">Aucun post disponible pour le moment</string>
     <string name="travelshare_home_post_clicked">Post de %1$s a %2$s</string>
 
     <string name="travelshare_search_title">Recherche</string>
-    <string name="travelshare_search_hint">Lieu, auteur, mot-cle...</string>
+    <string name="travelshare_search_hint">Lieu, auteur, mot-cle…</string>
     <string name="travelshare_search_button">Chercher</string>
 
     <string name="travelshare_messages_title">Messages</string>
@@ -31,12 +32,47 @@
     <string name="travelshare_messages_need_login">Connecte-toi pour acceder aux messages</string>
     <string name="travelshare_messages_type_private">prive</string>
     <string name="travelshare_messages_type_group">groupe</string>
+    <string name="travelshare_messages_empty">Aucune conversation pour le moment</string>
+    <string name="travelshare_messages_conversations_title">Conversations privees</string>
+
+    <string name="travelshare_groups_title">Groupes prives</string>
+    <string name="travelshare_groups_connected_hint">Creer et rejoindre un groupe privé</string>
+    <string name="travelshare_groups_need_login">Connecte-toi pour gerer les groupes</string>
+    <string name="travelshare_groups_create_title">Creer un groupe</string>
+    <string name="travelshare_groups_name_hint">Nom du groupe</string>
+    <string name="travelshare_groups_members_hint">Membres initiaux (separes par des virgules)</string>
+    <string name="travelshare_groups_create_button">Creer le groupe</string>
+    <string name="travelshare_groups_type_private">prive</string>
+    <string name="travelshare_groups_empty">Aucun groupe pour le moment</string>
+    <string name="travelshare_groups_created">Groupe cree</string>
+    <string name="travelshare_groups_create_error">Impossible de creer le groupe</string>
+    <string name="travelshare_groups_name_required">Le nom du groupe est requis</string>
+    <string name="travelshare_groups_member_count">%1$d membres</string>
 
     <string name="travelshare_thread_connected_hint">Discussion active</string>
-    <string name="travelshare_thread_input_hint">Ecrire un message...</string>
+    <string name="travelshare_thread_input_hint">Ecrire un message…</string>
     <string name="travelshare_thread_send">Envoyer</string>
     <string name="travelshare_thread_empty_message">Le message est vide</string>
     <string name="travelshare_thread_not_found">Conversation introuvable</string>
+
+    <string name="travelshare_group_detail_title">Groupe</string>
+    <string name="travelshare_group_detail_members_title">Membres</string>
+    <string name="travelshare_group_detail_member_hint">Ajouter un membre</string>
+    <string name="travelshare_group_detail_add_member_button">Ajouter</string>
+    <string name="travelshare_group_detail_leave_button">Quitter le groupe</string>
+    <string name="travelshare_group_detail_messages_title">Messages</string>
+    <string name="travelshare_group_detail_message_hint">Ecrire un message…</string>
+    <string name="travelshare_group_detail_send_button">Envoyer</string>
+    <string name="travelshare_group_detail_not_found">Groupe introuvable</string>
+    <string name="travelshare_group_detail_need_login">Connecte-toi pour gerer le groupe</string>
+    <string name="travelshare_group_detail_connected_hint">Discussion active et gestion du groupe</string>
+    <string name="travelshare_group_detail_member_empty">Le nom du membre est requis</string>
+    <string name="travelshare_group_detail_member_exists">Ce membre existe deja</string>
+    <string name="travelshare_group_detail_owner_cannot_leave">Le createur ne peut pas quitter le groupe</string>
+    <string name="travelshare_group_detail_left">Tu as quitte le groupe</string>
+    <string name="travelshare_group_detail_need_login_cta">Connexion requise</string>
+    <string name="travelshare_group_detail_member_row">• %1$s</string>
+    <string name="travelshare_group_detail_message_row">%1$s - %2$s\n%3$s</string>
 
     <string name="travelshare_add_title">Ajouter un post</string>
     <string name="travelshare_add_subtitle">Partage une photo de voyage avec la communaute</string>
@@ -54,10 +90,19 @@
     <string name="travelshare_itinerary_placeholder">Passerelle TravelPath a connecter en dernier.</string>
 
     <string name="travelshare_post_title_format">%1$s - %2$s</string>
+    <string name="travelshare_post_author_format">Par %1$s</string>
+    <string name="travelshare_post_location_label">Destination</string>
+    <string name="travelshare_post_description_label">Description</string>
+    <string name="travelshare_post_period_label">Periode</string>
+    <string name="travelshare_post_how_to_label">Comment y aller</string>
+    <string name="travelshare_post_social_label">Interactions</string>
     <string name="travelshare_post_period_format">Periode: %1$s</string>
     <string name="travelshare_post_how_to_format">Comment y aller: %1$s</string>
     <string name="travelshare_post_social_preview">Likes %1$d | Com %2$d</string>
     <string name="travelshare_post_social_detail">Likes %1$d | Commentaires %2$d | Reports %3$d</string>
+    <string name="travelshare_post_new_badge">Nouveau</string>
+    <string name="travelshare_post_feed_stats">%1$d likes • %2$d commentaires • %3$d signalements</string>
+    <string name="travelshare_post_feed_meta">%1$s</string>
     <string name="travelshare_post_not_found">Post introuvable</string>
 
     <string name="travelshare_action_like">Like</string>
@@ -67,6 +112,7 @@
 
     <string name="travelshare_comment_hint">Ajouter un commentaire</string>
     <string name="travelshare_comment_need_login">Connecte-toi pour commenter</string>
+    <string name="travelshare_comment_empty">Le commentaire est vide</string>
     <string name="travelshare_comment_added">Commentaire ajoute. Total: %1$d</string>
     <string name="travelshare_report_done">Signalement envoye. Total: %1$d</string>
 </resources>

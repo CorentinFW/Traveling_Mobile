@@ -90,6 +90,22 @@ public class InMemoryTravelSharePostRepository implements TravelSharePostReposit
     }
 
     @Override
+    public List<TravelSharePost> getPostsByAuthor(String authorName) {
+        List<TravelSharePost> result = new ArrayList<>();
+        if (authorName == null || authorName.trim().isEmpty()) {
+            return result;
+        }
+
+        String normalizedAuthor = authorName.trim();
+        for (TravelSharePost post : posts) {
+            if (post.getAuthorName().equalsIgnoreCase(normalizedAuthor)) {
+                result.add(post);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public TravelSharePost getPostById(String postId) {
         for (TravelSharePost post : posts) {
             if (post.getId().equals(postId)) {

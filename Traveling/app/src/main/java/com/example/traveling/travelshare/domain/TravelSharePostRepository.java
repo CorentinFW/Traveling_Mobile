@@ -7,6 +7,8 @@ public interface TravelSharePostRepository {
 
     List<TravelSharePost> searchPosts(String query);
 
+    List<TravelSharePost> getPostsByAuthor(String authorName);
+
     TravelSharePost getPostById(String postId);
 
     TravelSharePost createPost(

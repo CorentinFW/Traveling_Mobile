@@ -4,6 +4,7 @@ import com.example.traveling.travelshare.data.InMemoryTravelShareMessageReposito
 import com.example.traveling.travelshare.data.InMemoryTravelSharePostRepository;
 import com.example.traveling.travelshare.data.InMemoryTravelShareSessionRepository;
 import com.example.traveling.travelshare.domain.TravelShareConversation;
+import com.example.traveling.travelshare.domain.TravelShareGroup;
 import com.example.traveling.travelshare.domain.TravelShareMessage;
 import com.example.traveling.travelshare.domain.TravelSharePost;
 
@@ -83,6 +84,46 @@ public class TravelShareRepositoryTest {
         TravelShareMessage sent = repository.sendMessage("c1", "Corentin", "   ");
 
         assertNull(sent);
+    }
+
+    @Test
+    public void createGroupAddsOwnerAndMembers() {
+        InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
+
+        TravelShareGroup created = repository.createGroup(
+                "Week-end photo",
+                "Corentin",
+                java.util.Arrays.asList("Lina", "Mehdi", "Lina")
+        );
+
+        assertNotNull(created);
+        assertEquals("Week-end photo", created.getName());
+        assertTrue(created.getMemberNames().contains("Corentin"));
+        assertTrue(created.getMemberNames().contains("Lina"));
+        assertEquals(3, created.getMemberNames().size());
+    }
+
+    @Test
+    public void addMemberDoesNotDuplicate() {
+        InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
+
+        boolean firstAdd = repository.addMemberToGroup("g1", "Nora");
+        boolean secondAdd = repository.addMemberToGroup("g1", "Nora");
+
+        assertTrue(firstAdd);
+        assertFalse(secondAdd);
+        assertTrue(repository.getGroupById("g1").getMemberNames().contains("Nora"));
+    }
+
+    @Test
+    public void sendGroupMessageAppendsToGroup() {
+        InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
+
+        TravelShareMessage sent = repository.sendGroupMessage("g1", "Corentin", "Je peux reserver le train");
+
+        assertNotNull(sent);
+        assertEquals("g1", sent.getConversationId());
+        assertEquals("Je peux reserver le train", repository.getGroupById("g1").getMessages().get(repository.getGroupById("g1").getMessages().size() - 1).getText());
     }
 
     @Test

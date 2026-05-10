@@ -18,6 +18,15 @@
         android:text="@string/travelshare_home_subtitle"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/travelshare_home_empty"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/travelshare_home_list"
         android:layout_width="match_parent"

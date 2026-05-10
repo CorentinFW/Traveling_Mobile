@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Traveling</string>
+
+    <string name="travelshare_nav_home">Home</string>
+    <string name="travelshare_nav_search">Search</string>
+    <string name="travelshare_nav_messages">Messages</string>
+    <string name="travelshare_nav_add">Add</string>
+    <string name="travelshare_nav_itinerary">Itinerary</string>
+
+    <string name="travelshare_auth_login">Login</string>
+    <string name="travelshare_auth_profile">Profile</string>
+    <string name="travelshare_auth_title">TravelShare login</string>
+    <string name="travelshare_auth_username_hint">Traveler name</string>
+    <string name="travelshare_auth_login_success">Logged in as %1$s</string>
+    <string name="travelshare_auth_logout">Logout</string>
+    <string name="travelshare_auth_logout_success">Logged out, anonymous mode active</string>
+
+    <string name="travelshare_profile_title">My profile</string>
+    <string name="travelshare_profile_name_label">Active account</string>
+
+    <string name="travelshare_home_title">TravelShare</string>
+    <string name="travelshare_home_subtitle">Mock travel post discovery</string>
+    <string name="travelshare_home_empty">No post available yet</string>
+    <string name="travelshare_home_post_clicked">Post by %1$s in %2$s</string>
+
+    <string name="travelshare_search_title">Search</string>
+    <string name="travelshare_search_hint">Place, author, keyword…</string>
+    <string name="travelshare_search_button">Search</string>
+
+    <string name="travelshare_messages_title">Messages</string>
+    <string name="travelshare_messages_connected_hint">Private conversations and groups</string>
+    <string name="travelshare_messages_need_login">Log in to access messages</string>
+    <string name="travelshare_messages_type_private">private</string>
+    <string name="travelshare_messages_type_group">group</string>
+    <string name="travelshare_messages_empty">No conversation yet</string>
+    <string name="travelshare_messages_conversations_title">Private conversations</string>
+
+    <string name="travelshare_groups_title">Private groups</string>
+    <string name="travelshare_groups_connected_hint">Create and join a private group</string>
+    <string name="travelshare_groups_need_login">Log in to manage groups</string>
+    <string name="travelshare_groups_create_title">Create a group</string>
+    <string name="travelshare_groups_name_hint">Group name</string>
+    <string name="travelshare_groups_members_hint">Initial members (comma separated)</string>
+    <string name="travelshare_groups_create_button">Create group</string>
+    <string name="travelshare_groups_type_private">private</string>
+    <string name="travelshare_groups_empty">No group yet</string>
+    <string name="travelshare_groups_created">Group created</string>
+    <string name="travelshare_groups_create_error">Unable to create group</string>
+    <string name="travelshare_groups_name_required">Group name is required</string>
+    <string name="travelshare_groups_member_count">%1$d members</string>
+
+    <string name="travelshare_thread_connected_hint">Active discussion</string>
+    <string name="travelshare_thread_input_hint">Write a message…</string>
+    <string name="travelshare_thread_send">Send</string>
+    <string name="travelshare_thread_empty_message">The message is empty</string>
+    <string name="travelshare_thread_not_found">Conversation not found</string>
+
+    <string name="travelshare_group_detail_title">Group</string>
+    <string name="travelshare_group_detail_members_title">Members</string>
+    <string name="travelshare_group_detail_member_hint">Add a member</string>
+    <string name="travelshare_group_detail_add_member_button">Add</string>
+    <string name="travelshare_group_detail_leave_button">Leave group</string>
+    <string name="travelshare_group_detail_messages_title">Messages</string>
+    <string name="travelshare_group_detail_message_hint">Write a message…</string>
+    <string name="travelshare_group_detail_send_button">Send</string>
+    <string name="travelshare_group_detail_not_found">Group not found</string>
+    <string name="travelshare_group_detail_need_login">Log in to manage the group</string>
+    <string name="travelshare_group_detail_connected_hint">Active discussion and group management</string>
+    <string name="travelshare_group_detail_member_empty">Member name is required</string>
+    <string name="travelshare_group_detail_member_exists">This member already exists</string>
+    <string name="travelshare_group_detail_owner_cannot_leave">The owner cannot leave the group</string>
+    <string name="travelshare_group_detail_left">You left the group</string>
+    <string name="travelshare_group_detail_need_login_cta">Login required</string>
+    <string name="travelshare_group_detail_member_row">• %1$s</string>
+    <string name="travelshare_group_detail_message_row">%1$s - %2$s\n%3$s</string>
+
+    <string name="travelshare_add_title">Add a post</string>
+    <string name="travelshare_add_subtitle">Share a travel photo with the community</string>
+    <string name="travelshare_add_placeholder">Post creation (photo, text, tags) comes in the next step.</string>
+    <string name="travelshare_add_location_hint">Location (e.g. Paris)</string>
+    <string name="travelshare_add_period_hint">Period (e.g. Spring 2026)</string>
+    <string name="travelshare_add_description_hint">Description</string>
+    <string name="travelshare_add_how_to_hint">How to get there</string>
+    <string name="travelshare_add_publish">Publish</string>
+    <string name="travelshare_add_need_login_cta">Login required</string>
+    <string name="travelshare_add_need_login">Log in to publish a post</string>
+    <string name="travelshare_add_publish_success">Post published</string>
+
+    <string name="travelshare_itinerary_title">Itinerary</string>
+    <string name="travelshare_itinerary_placeholder">TravelPath bridge to connect last.</string>
+
+    <string name="travelshare_post_title_format">%1$s - %2$s</string>
+    <string name="travelshare_post_author_format">By %1$s</string>
+    <string name="travelshare_post_location_label">Destination</string>
+    <string name="travelshare_post_description_label">Description</string>
+    <string name="travelshare_post_period_label">Period</string>
+    <string name="travelshare_post_how_to_label">How to get there</string>
+    <string name="travelshare_post_social_label">Interactions</string>
+    <string name="travelshare_post_period_format">Period: %1$s</string>
+    <string name="travelshare_post_how_to_format">How to get there: %1$s</string>
+    <string name="travelshare_post_social_preview">Likes %1$d | Com %2$d</string>
+    <string name="travelshare_post_social_detail">Likes %1$d | Comments %2$d | Reports %3$d</string>
+    <string name="travelshare_post_new_badge">New</string>
+    <string name="travelshare_post_feed_stats">%1$d likes • %2$d comments • %3$d reports</string>
+    <string name="travelshare_post_feed_meta">%1$s</string>
+    <string name="travelshare_post_not_found">Post not found</string>
+
+    <string name="travelshare_action_like">Like</string>
+    <string name="travelshare_action_unlike">Unlike</string>
+    <string name="travelshare_action_report">Report</string>
+    <string name="travelshare_action_comment">Comment</string>
+
+    <string name="travelshare_comment_hint">Add a comment</string>
+    <string name="travelshare_comment_need_login">Log in to comment</string>
+    <string name="travelshare_comment_empty">The comment is empty</string>
+    <string name="travelshare_comment_added">Comment added. Total: %1$d</string>
+    <string name="travelshare_report_done">Report sent. Total: %1$d</string>
+</resources>
+
+
