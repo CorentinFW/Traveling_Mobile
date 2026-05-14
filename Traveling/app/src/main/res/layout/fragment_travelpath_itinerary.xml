@@ -137,6 +137,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/travelpath_itinerary_title" />
 
+    <ImageButton
+        android:id="@+id/travelpath_itinerary_prev_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/travelpath_itinerary_prev_place"
+        android:src="@android:drawable/ic_media_previous"
+        app:layout_constraintBottom_toBottomOf="@id/travelpath_itinerary_map"
+        app:layout_constraintStart_toStartOf="@id/travelpath_itinerary_map"
+        app:layout_constraintTop_toTopOf="@id/travelpath_itinerary_map" />
+
+    <ImageButton
+        android:id="@+id/travelpath_itinerary_next_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/travelpath_itinerary_next_place"
+        android:src="@android:drawable/ic_media_next"
+        app:layout_constraintBottom_toBottomOf="@id/travelpath_itinerary_map"
+        app:layout_constraintEnd_toEndOf="@id/travelpath_itinerary_map"
+        app:layout_constraintTop_toTopOf="@id/travelpath_itinerary_map" />
+
     <TextView
         android:id="@+id/travelpath_itinerary_title"
         android:layout_width="wrap_content"

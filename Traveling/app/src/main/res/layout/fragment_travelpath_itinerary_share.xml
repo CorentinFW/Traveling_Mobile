@@ -50,20 +50,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/travelpath_itinerary_injection_container"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/travelpath_itinerary_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:orientation="vertical"
+        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/travelpath_itinerary_bottom_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/travelpath_itinerary_top_divider">
 
-        <include layout="@layout/item_travelpath_itinerary_step" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/travelpath_itinerary_injection_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_travelpath_itinerary_step" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <View
         android:id="@+id/travelpath_itinerary_top_divider"
@@ -130,6 +137,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/travelpath_itinerary_title" />
 
+    <ImageButton
+        android:id="@+id/travelpath_itinerary_prev_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/travelpath_itinerary_prev_place"
+        android:src="@android:drawable/ic_media_previous"
+        app:layout_constraintBottom_toBottomOf="@id/travelpath_itinerary_map"
+        app:layout_constraintStart_toStartOf="@id/travelpath_itinerary_map"
+        app:layout_constraintTop_toTopOf="@id/travelpath_itinerary_map" />
+
+    <ImageButton
+        android:id="@+id/travelpath_itinerary_next_button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/travelpath_itinerary_next_place"
+        android:src="@android:drawable/ic_media_next"
+        app:layout_constraintBottom_toBottomOf="@id/travelpath_itinerary_map"
+        app:layout_constraintEnd_toEndOf="@id/travelpath_itinerary_map"
+        app:layout_constraintTop_toTopOf="@id/travelpath_itinerary_map" />
+
     <TextView
         android:id="@+id/travelpath_itinerary_title"
         android:layout_width="wrap_content"
@@ -143,4 +174,3 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
