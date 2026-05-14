@@ -3,21 +3,29 @@ package com.example.traveling.TravelPath;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FieldPath;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Locale;
 
 public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
 
+    private static final String TAG = "TravelPathPlaceRepo";
     private static final String COLLECTION_PLACES = "travelpath_places_catalog";
     private static final String FALLBACK_COLLECTION_PLACES = "travelpath_places";
     private static final String LEGACY_COLLECTION_PLACES = "places";
     private static final int RESULTS_LIMIT = 10;
+    private static final int WHERE_IN_LIMIT = 10;
 
     private final FirebaseFirestore firestore;
 
@@ -131,30 +139,39 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
             @NonNull LoadCallback callback
     ) {
         if (index >= collections.size()) {
-            if (lastError != null) {
-                // Evite de bloquer l'UI si Firestore est indisponible ou mal configure.
-                callback.onSuccess(buildFallbackPlaces());
-                return;
-            }
-            callback.onSuccess(new ArrayList<>());
+            Log.w(TAG, "Aucun lieu trouve dans Firestore; fallback active. Derniere erreur: "
+                    + (lastError == null ? "<aucune>" : lastError.getMessage()));
+            // Aucun lieu trouve dans Firestore (ou erreur) : bascule sur les donnees de secours.
+            callback.onSuccess(buildFallbackPlaces());
             return;
         }
 
         String collectionName = collections.get(index);
+        Log.d(TAG, "Chargement de la collection: " + collectionName);
         firestore.collection(collectionName)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     List<TravelPathPlace> places = new ArrayList<>();
-                    snapshot.getDocuments().forEach(document -> places.add(TravelPathPlace.fromDocument(document)));
+                    snapshot.getDocuments().forEach(document -> {
+                        TravelPathPlace place = TravelPathPlace.fromDocument(document);
+                        place.setId(document.getId());
+                        place.setSourceCollection(collectionName);
+                        places.add(place);
+                    });
 
                     if (!places.isEmpty()) {
+                        Log.d(TAG, "Collection " + collectionName + " -> " + places.size() + " lieux charges.");
                         callback.onSuccess(places);
                         return;
                     }
 
+                    Log.w(TAG, "Collection " + collectionName + " vide.");
                     loadFromCollectionsSequentially(collections, index + 1, lastError, callback);
                 })
-                .addOnFailureListener(error -> loadFromCollectionsSequentially(collections, index + 1, error, callback));
+                .addOnFailureListener(error -> {
+                    Log.e(TAG, "Echec chargement collection " + collectionName + ": " + error.getMessage(), error);
+                    loadFromCollectionsSequentially(collections, index + 1, error, callback);
+                });
     }
 
     @NonNull
@@ -170,6 +187,9 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
         fallback.add(new TravelPathPlace("Arc de Triomphe", "Monument", null, 43.6113, 3.8700, 0.0, 4.2));
         fallback.add(new TravelPathPlace("MO.CO.", "Culture", null, 43.6068, 3.8749, 10.0, 4.0));
         fallback.add(new TravelPathPlace("Antigone", "Shopping", null, 43.6071, 3.8903, 25.0, 4.3));
+        for (TravelPathPlace place : fallback) {
+            place.setSourceCollection("fallback");
+        }
         return fallback;
     }
 
@@ -196,5 +216,79 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
         String normalized = Normalizer.normalize(value, Normalizer.Form.NFD);
         String withoutAccents = normalized.replaceAll("\\p{M}+", "");
         return withoutAccents.toLowerCase(Locale.ROOT).trim();
+    }
+
+    public void loadPlacesByReferences(@NonNull List<String> references, @NonNull LoadCallback callback) {
+        if (references.isEmpty()) {
+            callback.onSuccess(new ArrayList<>());
+            return;
+        }
+
+        Map<String, List<String>> byCollection = new HashMap<>();
+        for (String ref : references) {
+            String[] parts = ref.split("/", 2);
+            if (parts.length != 2) {
+                continue;
+            }
+            byCollection.computeIfAbsent(parts[0], key -> new ArrayList<>()).add(parts[1]);
+        }
+
+        if (byCollection.isEmpty()) {
+            callback.onSuccess(new ArrayList<>());
+            return;
+        }
+
+        Map<String, TravelPathPlace> byReference = new HashMap<>();
+        AtomicInteger pending = new AtomicInteger(0);
+        AtomicInteger failures = new AtomicInteger(0);
+
+        for (Map.Entry<String, List<String>> entry : byCollection.entrySet()) {
+            String collection = entry.getKey();
+            List<String> ids = entry.getValue();
+            for (int start = 0; start < ids.size(); start += WHERE_IN_LIMIT) {
+                List<String> batch = ids.subList(start, Math.min(start + WHERE_IN_LIMIT, ids.size()));
+                pending.incrementAndGet();
+                firestore.collection(collection)
+                        .whereIn(FieldPath.documentId(), batch)
+                        .get()
+                        .addOnSuccessListener(snapshot -> {
+                            snapshot.getDocuments().forEach(document -> {
+                                TravelPathPlace place = TravelPathPlace.fromDocument(document);
+                                place.setId(document.getId());
+                                place.setSourceCollection(collection);
+                                String key = collection + "/" + document.getId();
+                                byReference.put(key, place);
+                            });
+                            if (pending.decrementAndGet() == 0) {
+                                callback.onSuccess(orderPlacesByReferences(references, byReference));
+                            }
+                        })
+                        .addOnFailureListener(error -> {
+                            failures.incrementAndGet();
+                            if (pending.decrementAndGet() == 0) {
+                                if (byReference.isEmpty()) {
+                                    callback.onError(error);
+                                } else {
+                                    callback.onSuccess(orderPlacesByReferences(references, byReference));
+                                }
+                            }
+                        });
+            }
+        }
+    }
+
+    @NonNull
+    private List<TravelPathPlace> orderPlacesByReferences(
+            @NonNull List<String> references,
+            @NonNull Map<String, TravelPathPlace> byReference
+    ) {
+        List<TravelPathPlace> ordered = new ArrayList<>();
+        for (String ref : references) {
+            TravelPathPlace place = byReference.get(ref);
+            if (place != null) {
+                ordered.add(place);
+            }
+        }
+        return ordered;
     }
 }

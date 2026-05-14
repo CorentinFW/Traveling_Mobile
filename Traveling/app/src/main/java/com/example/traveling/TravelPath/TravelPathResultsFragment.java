@@ -167,6 +167,7 @@ public class TravelPathResultsFragment extends Fragment {
                 sourcePlaces = new ArrayList<>(places);
                 List<TravelPathPlace> displayedPlaces = buildDisplayedPlaces();
                 renderPlaces(displayedPlaces);
+                notifyIfFallbackUsed(places);
 
                 if (displayedPlaces.isEmpty() && !query.isEmpty()) {
                     resultsCount.setText(getString(R.string.travelpath_results_no_match, query));
@@ -226,6 +227,7 @@ public class TravelPathResultsFragment extends Fragment {
 
                 sourcePlaces = new ArrayList<>(places);
                 applyFilterAndSortAndRender();
+                notifyIfFallbackUsed(places);
             }
 
             @Override
@@ -334,11 +336,21 @@ public class TravelPathResultsFragment extends Fragment {
     private void applyFilterAndSortAndRender() {
         List<TravelPathPlace> displayedPlaces = buildDisplayedPlaces();
         renderPlaces(displayedPlaces);
+        notifyIfFallbackUsed(displayedPlaces);
 
         if (displayedPlaces.isEmpty() && !TextUtils.isEmpty(currentQuery)) {
             resultsCount.setText(getString(R.string.travelpath_results_no_match, currentQuery));
         } else {
             resultsCount.setText(getString(R.string.travelpath_results_count_format, displayedPlaces.size()));
+        }
+    }
+
+    private void notifyIfFallbackUsed(@NonNull List<TravelPathPlace> places) {
+        for (TravelPathPlace place : places) {
+            if ("fallback".equals(place.getSourceCollection())) {
+                Toast.makeText(requireContext(), R.string.travelpath_fallback_used, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
     }
 
@@ -442,4 +454,3 @@ public class TravelPathResultsFragment extends Fragment {
         this.mapEnabled = enabled;
     }
 }
-

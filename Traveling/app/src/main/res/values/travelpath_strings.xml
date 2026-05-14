@@ -170,4 +170,6 @@
 
     <string name="travelpath_itinerary_prev_place">Lieu precedent</string>
     <string name="travelpath_itinerary_next_place">Lieu suivant</string>
+    <string name="travelpath_fallback_used">Fallback utilisé : vérifie la base de données.</string>
+    <string name="travelpath_itinerary_empty">Aucun lieu disponible pour générer un parcours.</string>
 </resources>

@@ -21,6 +21,8 @@ public class TravelPathPlace {
     private final Double price;
     @Nullable
     private final Double star;
+    private String id;
+    private String sourceCollection;
 
     public TravelPathPlace(@NonNull String name, @NonNull String theme, @Nullable String imageUrl) {
         this(name, theme, imageUrl, null, null, null, null);
@@ -87,6 +89,32 @@ public class TravelPathPlace {
     @Nullable
     public Double getStar() {
         return star;
+    }
+
+    @Nullable
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@Nullable String id) {
+        this.id = id;
+    }
+
+    @Nullable
+    public String getSourceCollection() {
+        return sourceCollection;
+    }
+
+    public void setSourceCollection(@Nullable String sourceCollection) {
+        this.sourceCollection = sourceCollection;
+    }
+
+    @Nullable
+    public String getReference() {
+        if (id == null || id.trim().isEmpty() || sourceCollection == null || sourceCollection.trim().isEmpty()) {
+            return null;
+        }
+        return sourceCollection.trim() + "/" + id.trim();
     }
 
     @NonNull

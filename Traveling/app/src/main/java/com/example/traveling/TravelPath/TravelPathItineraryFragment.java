@@ -342,6 +342,13 @@ public class TravelPathItineraryFragment extends Fragment {
             stepMeta.setText(formatDistanceLabel(previousPlace, place));
             stepStarValue.setText(formatStarLabel(place));
 
+            itemView.setOnClickListener(v -> {
+                Fragment parent = getParentFragment();
+                if (parent instanceof TravelPathMainFragment) {
+                    ((TravelPathMainFragment) parent).showPlaceDetailScreen(place);
+                }
+            });
+
             itineraryContainer.addView(itemView);
             previousPlace = place;
         }
@@ -452,6 +459,7 @@ public class TravelPathItineraryFragment extends Fragment {
         route.setEffort(readEffortLabel());
         route.setRouteType(readSelectedRouteType());
         route.setPlacesSummary(buildPlacesSummary());
+        route.setPlaceReferences(buildPlaceReferences());
         return route;
     }
 
@@ -504,6 +512,19 @@ public class TravelPathItineraryFragment extends Fragment {
             names.add(place.getName());
         }
         return joinWithComma(names);
+    }
+
+    @NonNull
+    private List<String> buildPlaceReferences() {
+        List<TravelPathPlace> itinerary = TravelPathItineraryStore.loadItinerary(requireContext());
+        List<String> references = new ArrayList<>();
+        for (TravelPathPlace place : itinerary) {
+            String ref = place.getReference();
+            if (ref != null) {
+                references.add(ref);
+            }
+        }
+        return references;
     }
 
     @NonNull
@@ -601,3 +622,4 @@ public class TravelPathItineraryFragment extends Fragment {
         TravelPathItineraryStore.clear(context);
     }
 }
+

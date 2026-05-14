@@ -37,6 +37,7 @@ public class TravelPathItineraryShareFragment extends Fragment {
     private static final String ARG_EFFORT = "arg_effort";
     private static final String ARG_ROUTE_TYPE = "arg_route_type";
     private static final String ARG_PLACES_SUMMARY = "arg_places_summary";
+    private static final String ARG_PLACE_REFERENCES = "arg_place_references";
 
     private LinearLayout itineraryContainer;
     private TextView budgetValue;
@@ -67,6 +68,10 @@ public class TravelPathItineraryShareFragment extends Fragment {
         args.putString(ARG_EFFORT, safeString(route.getEffort()));
         args.putString(ARG_ROUTE_TYPE, safeString(route.getRouteType()));
         args.putString(ARG_PLACES_SUMMARY, safeString(route.getPlacesSummary()));
+        ArrayList<String> refs = new ArrayList<>(route.getPlaceReferences());
+        if (!refs.isEmpty()) {
+            args.putStringArrayList(ARG_PLACE_REFERENCES, refs);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -96,6 +101,7 @@ public class TravelPathItineraryShareFragment extends Fragment {
         String visitSummary = args.getString(ARG_VISIT_SUMMARY, "");
         String effort = args.getString(ARG_EFFORT, "");
         String placesSummary = args.getString(ARG_PLACES_SUMMARY, "");
+        ArrayList<String> placeRefs = args.getStringArrayList(ARG_PLACE_REFERENCES);
 
         if (!routeName.trim().isEmpty()) {
             titleValue.setText(routeName.trim());
@@ -122,7 +128,35 @@ public class TravelPathItineraryShareFragment extends Fragment {
             effortValue.setText(effort.trim());
         }
 
+        if (placeRefs != null && !placeRefs.isEmpty()) {
+            loadPlacesFromReferences(placeRefs, placesSummary);
+            return;
+        }
         renderPlaces(placesSummary);
+    }
+
+    private void loadPlacesFromReferences(@NonNull List<String> references, @NonNull String placesSummary) {
+        placeRepository.loadPlacesByReferences(references, new TravelPathPlaceRepository.LoadCallback() {
+            @Override
+            public void onSuccess(@NonNull List<TravelPathPlace> places) {
+                if (!isAdded()) {
+                    return;
+                }
+                if (!places.isEmpty()) {
+                    renderPlaceList(places);
+                    return;
+                }
+                renderPlaces(placesSummary);
+            }
+
+            @Override
+            public void onError(@NonNull Exception exception) {
+                if (!isAdded()) {
+                    return;
+                }
+                renderPlaces(placesSummary);
+            }
+        });
     }
 
     @Override
@@ -254,6 +288,13 @@ public class TravelPathItineraryShareFragment extends Fragment {
             stepName.setText(place.getName());
             stepMeta.setText(formatDistanceLabel(previousPlace, place));
             stepStarValue.setText(formatStarLabel(place));
+
+            itemView.setOnClickListener(v -> {
+                Fragment parent = getParentFragment();
+                if (parent instanceof TravelPathMainFragment) {
+                    ((TravelPathMainFragment) parent).showPlaceDetailScreen(place);
+                }
+            });
 
             itineraryContainer.addView(itemView);
             previousPlace = place;
