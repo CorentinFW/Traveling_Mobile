@@ -17,9 +17,13 @@ public class TravelPathPlace {
     private final Double latitude;
     @Nullable
     private final Double longitude;
+    @Nullable
+    private final Double price;
+    @Nullable
+    private final Double star;
 
     public TravelPathPlace(@NonNull String name, @NonNull String theme, @Nullable String imageUrl) {
-        this(name, theme, imageUrl, null, null);
+        this(name, theme, imageUrl, null, null, null, null);
     }
 
     public TravelPathPlace(
@@ -29,11 +33,25 @@ public class TravelPathPlace {
             @Nullable Double latitude,
             @Nullable Double longitude
     ) {
+        this(name, theme, imageUrl, latitude, longitude, null, null);
+    }
+
+    public TravelPathPlace(
+            @NonNull String name,
+            @NonNull String theme,
+            @Nullable String imageUrl,
+            @Nullable Double latitude,
+            @Nullable Double longitude,
+            @Nullable Double price,
+            @Nullable Double star
+    ) {
         this.name = name;
         this.theme = theme;
         this.imageUrl = imageUrl;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.price = price;
+        this.star = star;
     }
 
     @NonNull
@@ -61,6 +79,16 @@ public class TravelPathPlace {
         return longitude;
     }
 
+    @Nullable
+    public Double getPrice() {
+        return price;
+    }
+
+    @Nullable
+    public Double getStar() {
+        return star;
+    }
+
     @NonNull
     public static TravelPathPlace fromDocument(@NonNull DocumentSnapshot document) {
         String name = document.getString("name");
@@ -68,13 +96,17 @@ public class TravelPathPlace {
         String image = document.getString("image");
         Double latitude = readLatitude(document);
         Double longitude = readLongitude(document);
+        Double price = toDouble(document.get("price"));
+        Double star = toDouble(document.get("star"));
 
         return new TravelPathPlace(
                 (name == null || name.trim().isEmpty()) ? "Lieu-dit" : name,
                 (theme == null || theme.trim().isEmpty()) ? "" : theme,
                 image,
                 latitude,
-                longitude
+                longitude,
+                price,
+                star
         );
     }
 
@@ -170,4 +202,3 @@ public class TravelPathPlace {
         return null;
     }
 }
-

@@ -71,6 +71,9 @@
     <string name="travelpath_itinerary_map">Itinerary map</string>
     <string name="travelpath_itinerary_title">Itinerary</string>
     <string name="travelpath_route_name_title">Route name</string>
+    <string name="travelpath_route_name_prompt_title">Route name</string>
+    <string name="travelpath_route_name_confirm">Save</string>
+    <string name="travelpath_route_name_cancel">Cancel</string>
     <string name="travelpath_progress_zero">0%</string>
     <string name="travelpath_budget_currency">EUR</string>
     <string name="travelpath_effort_low">Low</string>
@@ -117,6 +120,7 @@
     <string name="travelpath_step_place_placeholder">Place name</string>
     <string name="travelpath_step_meta_placeholder">Xm | Y min | Z</string>
     <string name="travelpath_step_star">★</string>
+    <string name="travelpath_step_star_placeholder">0.0</string>
     <string name="travelpath_auth_success">Signed in successfully</string>
     <string name="travelpath_auth_error_google_cancelled">Google sign-in cancelled</string>
     <string name="travelpath_auth_error_profile_save">Profile could not be saved to database</string>
@@ -159,5 +163,8 @@
         <item>Theme (A-Z)</item>
         <item>Theme (Z-A)</item>
     </string-array>
-</resources>
 
+    <string name="travelpath_step_distance_km_format">%1$.1f km</string>
+    <string name="travelpath_step_distance_m_format">%1$d m</string>
+    <string name="travelpath_step_distance_unknown">Unknown distance</string>
+</resources>

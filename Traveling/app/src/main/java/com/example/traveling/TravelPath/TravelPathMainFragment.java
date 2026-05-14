@@ -313,5 +313,22 @@ public class TravelPathMainFragment extends Fragment {
     private boolean isUserAuthenticated() {
         return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
-}
 
+    public void showMyRoutesScreen() {
+        navigateToScreen(Screen.MY_ROUTES);
+    }
+
+    public void resetToWelcomeScreen() {
+        screenHistory.clear();
+        currentDetailPlace = null;
+        currentScreen = Screen.WELCOME;
+        replaceInjectedScreen(currentScreen);
+    }
+
+    public void resetToMyRoutesScreen() {
+        screenHistory.clear();
+        currentDetailPlace = null;
+        currentScreen = Screen.MY_ROUTES;
+        replaceInjectedScreen(currentScreen);
+    }
+}

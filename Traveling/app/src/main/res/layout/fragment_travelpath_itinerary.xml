@@ -50,20 +50,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/travelpath_itinerary_injection_container"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/travelpath_itinerary_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:orientation="vertical"
+        android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/travelpath_itinerary_bottom_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/travelpath_itinerary_top_divider">
 
-        <include layout="@layout/item_travelpath_itinerary_step" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/travelpath_itinerary_injection_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_travelpath_itinerary_step" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <View
         android:id="@+id/travelpath_itinerary_top_divider"
@@ -143,4 +150,3 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

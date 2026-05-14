@@ -110,7 +110,12 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
         });
     }
 
-    private void loadAllPlaces(@NonNull LoadCallback callback) {
+    @Override
+    public void loadAllPlaces(@NonNull LoadCallback callback) {
+        loadAllPlacesInternal(callback);
+    }
+
+    private void loadAllPlacesInternal(@NonNull LoadCallback callback) {
         List<String> collections = Arrays.asList(
                 COLLECTION_PLACES,
                 FALLBACK_COLLECTION_PLACES,
@@ -155,16 +160,16 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
     @NonNull
     private List<TravelPathPlace> buildFallbackPlaces() {
         List<TravelPathPlace> fallback = new ArrayList<>();
-        fallback.add(new TravelPathPlace("Place de la Comedie", "Monument", null, 43.6086, 3.8793));
-        fallback.add(new TravelPathPlace("Promenade du Peyrou", "Loisir", null, 43.6119, 3.8684));
-        fallback.add(new TravelPathPlace("Musee Fabre", "Culture", null, 43.6116, 3.8814));
-        fallback.add(new TravelPathPlace("Jardin des Plantes", "Loisir", null, 43.6160, 3.8702));
-        fallback.add(new TravelPathPlace("Lez Market", "Shopping", null, 43.6035, 3.8981));
-        fallback.add(new TravelPathPlace("Halles Castellane", "Restaurant", null, 43.6112, 3.8777));
-        fallback.add(new TravelPathPlace("Opera Comedie", "Evenements", null, 43.6088, 3.8796));
-        fallback.add(new TravelPathPlace("Arc de Triomphe", "Monument", null, 43.6113, 3.8700));
-        fallback.add(new TravelPathPlace("MO.CO.", "Culture", null, 43.6068, 3.8749));
-        fallback.add(new TravelPathPlace("Antigone", "Shopping", null, 43.6071, 3.8903));
+        fallback.add(new TravelPathPlace("Place de la Comedie", "Monument", null, 43.6086, 3.8793, 0.0, 4.6));
+        fallback.add(new TravelPathPlace("Promenade du Peyrou", "Loisir", null, 43.6119, 3.8684, 5.0, 4.4));
+        fallback.add(new TravelPathPlace("Musee Fabre", "Culture", null, 43.6116, 3.8814, 12.0, 4.5));
+        fallback.add(new TravelPathPlace("Jardin des Plantes", "Loisir", null, 43.6160, 3.8702, 0.0, 4.3));
+        fallback.add(new TravelPathPlace("Lez Market", "Shopping", null, 43.6035, 3.8981, 15.0, 4.2));
+        fallback.add(new TravelPathPlace("Halles Castellane", "Restaurant", null, 43.6112, 3.8777, 22.0, 4.4));
+        fallback.add(new TravelPathPlace("Opera Comedie", "Evenements", null, 43.6088, 3.8796, 18.0, 4.1));
+        fallback.add(new TravelPathPlace("Arc de Triomphe", "Monument", null, 43.6113, 3.8700, 0.0, 4.2));
+        fallback.add(new TravelPathPlace("MO.CO.", "Culture", null, 43.6068, 3.8749, 10.0, 4.0));
+        fallback.add(new TravelPathPlace("Antigone", "Shopping", null, 43.6071, 3.8903, 25.0, 4.3));
         return fallback;
     }
 
@@ -193,6 +198,3 @@ public class TravelPathPlaceRepository implements TravelPathPlaceDataSource {
         return withoutAccents.toLowerCase(Locale.ROOT).trim();
     }
 }
-
-
-
