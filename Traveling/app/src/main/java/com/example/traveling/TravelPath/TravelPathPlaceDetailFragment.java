@@ -12,6 +12,7 @@ import com.example.traveling.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class TravelPathPlaceDetailFragment extends Fragment {
 
@@ -55,6 +56,8 @@ public class TravelPathPlaceDetailFragment extends Fragment {
 
         ((SupportMapFragment) mapFragment).getMapAsync(map -> {
             LatLng target = readPlaceLatLng();
+            map.clear();
+            map.addMarker(new MarkerOptions().position(target).title(readPlaceName()));
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(target, PLACE_ZOOM));
         });
     }
@@ -78,4 +81,3 @@ public class TravelPathPlaceDetailFragment extends Fragment {
         return new LatLng(args.getDouble(ARG_PLACE_LATITUDE), args.getDouble(ARG_PLACE_LONGITUDE));
     }
 }
-
