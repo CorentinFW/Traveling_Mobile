@@ -4,26 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-    <!-- Top Bar with Title and Add Button -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/travelshare_messages_title"
-            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-            android:layout_centerVertical="true" />
-        <ImageButton
-            android:id="@+id/travelshare_messages_add_btn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_input_add"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Add group or message" />
-    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/travelshare_messages_title"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+
     <TextView
         android:id="@+id/travelshare_messages_helper_text"
         android:layout_width="match_parent"
@@ -31,26 +18,45 @@
         android:layout_marginTop="6dp"
         android:text="@string/travelshare_messages_connected_hint"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-    <!-- Group Creation Layout (Hidden by default) -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/travelshare_groups_create_title"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+        <ImageButton
+            android:id="@+id/travelshare_messages_add_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/travelshare_groups_create_button"
+            android:src="@android:drawable/ic_input_add" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/travelshare_messages_add_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
-        android:layout_marginTop="14dp"
         android:visibility="gone">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/travelshare_groups_create_title"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
         <EditText
             android:id="@+id/travelshare_messages_group_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="@string/travelshare_groups_name_hint"
             android:inputType="textPersonName" />
+
         <EditText
             android:id="@+id/travelshare_messages_group_members_input"
             android:layout_width="match_parent"
@@ -58,6 +64,7 @@
             android:layout_marginTop="6dp"
             android:hint="@string/travelshare_groups_members_hint"
             android:inputType="text" />
+
         <Button
             android:id="@+id/travelshare_messages_group_create_button"
             android:layout_width="match_parent"
@@ -65,11 +72,35 @@
             android:layout_marginTop="6dp"
             android:text="@string/travelshare_groups_create_button" />
     </LinearLayout>
-    <!-- Combined List for Conversations and Groups -->
+
+    <TextView
+        android:id="@+id/travelshare_messages_conversations_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="@string/travelshare_messages_conversations_title"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
     <ListView
         android:id="@+id/travelshare_messages_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/travelshare_messages_groups_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/travelshare_groups_title"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+    <ListView
+        android:id="@+id/travelshare_messages_groups_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1" />
+
 </LinearLayout>

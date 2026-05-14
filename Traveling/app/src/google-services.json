@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "377661916063",
+    "project_id": "traveling-e01cf",
+    "storage_bucket": "traveling-e01cf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377661916063:android:b28399c28fb0bb898ef3aa",
+        "android_client_info": {
+          "package_name": "com.example.traveling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377661916063-sfeqdf6618gfclcea7b0afh3jbigvebq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.traveling",
+            "certificate_hash": "4690c43ddf2b9e0cee05620bae20e99c714115ec"
+          }
+        },
+        {
+          "client_id": "377661916063-vfoj60q48a0kht5ef36589nekrpnjglq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3lzmQF-Jz90zdxRXZYjgV_e_3Ga7nGew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377661916063-vfoj60q48a0kht5ef36589nekrpnjglq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,7 +95,13 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
     @Override
     public TravelSharePost createPost(String authorName, String locationName, String description, String period, String howToGetThere) {
         try {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser == null) {
+                Log.w("TravelShare", "Firestore createPost skipped: unauthenticated user");
+                return null;
+            }
             Map<String, Object> data = new HashMap<>();
+            data.put("authorId", currentUser.getUid());
             data.put("authorName", authorName);
             data.put("locationName", locationName);
             data.put("description", description);
@@ -166,7 +174,13 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
         String currentDisplay = TravelShareDataProvider.sessionRepository().getDisplayName();
         if (currentDisplay == null) currentDisplay = "anonymous";
         try {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (currentUser == null) {
+                Log.w("TravelShare", "Firestore addComment skipped: unauthenticated user");
+                return 0;
+            }
             Map<String, Object> data = new HashMap<>();
+            data.put("authorId", currentUser.getUid());
             data.put("authorDisplayName", currentDisplay);
             data.put("text", commentText);
             data.put("createdAt", Timestamp.now());

@@ -34,14 +34,14 @@ public class TravelShareMessagesFragment extends Fragment {
     private TravelShareMessageRepository messageRepository;
     private TravelShareSessionRepository sessionRepository;
     private TextView helperText;
-    
+
     private ImageButton addButton;
     private LinearLayout addGroupContainer;
-    
+
     private EditText groupNameInput;
     private EditText groupMembersInput;
     private Button createGroupButton;
-    
+
     private ListView listMerged;
 
     public TravelShareMessagesFragment() {
@@ -56,14 +56,14 @@ public class TravelShareMessagesFragment extends Fragment {
         messageRepository = TravelShareDataProvider.messageRepository();
 
         helperText = view.findViewById(R.id.travelshare_messages_helper_text);
-        
+
         addButton = view.findViewById(R.id.travelshare_messages_add_btn);
         addGroupContainer = view.findViewById(R.id.travelshare_messages_add_layout);
-        
+
         groupNameInput = view.findViewById(R.id.travelshare_messages_group_name_input);
         groupMembersInput = view.findViewById(R.id.travelshare_messages_group_members_input);
         createGroupButton = view.findViewById(R.id.travelshare_messages_group_create_button);
-        
+
         listMerged = view.findViewById(R.id.travelshare_messages_list);
 
         if (!sessionRepository.isAuthenticated()) {
@@ -151,13 +151,13 @@ public class TravelShareMessagesFragment extends Fragment {
     private void refreshList() {
         List<TravelShareConversation> conversations = messageRepository.getConversations();
         List<TravelShareGroup> groups = messageRepository.getGroups();
-        
+
         List<Object> mergedList = new ArrayList<>();
         mergedList.addAll(conversations);
         mergedList.addAll(groups);
-        
+
         // You could sort mergedList by recent activity here if you have dates, but for now we just append.
-        
+
         TravelShareMessageAdapter adapter = new TravelShareMessageAdapter(
                 requireContext(),
                 mergedList,
