@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import com.example.traveling.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -251,6 +254,7 @@ public class TravelPathResultsFragment extends Fragment {
         resultsContainer.removeAllViews();
         for (TravelPathPlace place : places) {
             View item = inflater.inflate(R.layout.item_travelpath_result, resultsContainer, false);
+            ImageView imageView = item.findViewById(R.id.travelpath_result_image);
             TextView title = item.findViewById(R.id.travelpath_result_title);
             TextView theme = item.findViewById(R.id.travelpath_result_theme);
             TextView location = item.findViewById(R.id.travelpath_result_location);
@@ -259,6 +263,7 @@ public class TravelPathResultsFragment extends Fragment {
             title.setText(place.getName());
             theme.setText(getString(R.string.travelpath_result_theme_format, place.getTheme()));
             location.setText(getString(R.string.travelpath_result_location_value));
+            loadPlaceImage(imageView, place.getImageUrl());
 
             String placeKey = buildSavedPlaceKey(place);
             favoriteToggle.setChecked(selectedPlaceKeys.contains(placeKey));
@@ -279,6 +284,24 @@ public class TravelPathResultsFragment extends Fragment {
 
             resultsContainer.addView(item);
         }
+    }
+
+    private void loadPlaceImage(@NonNull ImageView imageView, @Nullable String imageUrl) {
+        if (TextUtils.isEmpty(imageUrl)) {
+            return;
+        }
+        if (imageUrl.startsWith("gs://")) {
+            FirebaseStorage.getInstance()
+                    .getReferenceFromUrl(imageUrl)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        if (isAdded()) {
+                            Glide.with(this).load(uri).into(imageView);
+                        }
+                    });
+            return;
+        }
+        Glide.with(this).load(imageUrl).into(imageView);
     }
 
     private void updateSavedPlaceSelection(@NonNull String placeKey, @NonNull String placeName, boolean isSelected) {
