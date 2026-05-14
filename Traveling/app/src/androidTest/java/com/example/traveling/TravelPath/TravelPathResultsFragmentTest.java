@@ -189,6 +189,10 @@ public class TravelPathResultsFragmentTest {
             }
             callback.onSuccess(new ArrayList<>(randomResultsQueue.removeFirst()));
         }
+
+        @Override
+        public void loadAllPlaces(@NonNull TravelPathPlaceRepository.LoadCallback callback) {
+            callback.onSuccess(randomResultsQueue.isEmpty() ? new ArrayList<>() : new ArrayList<>(randomResultsQueue.peekFirst()));
+        }
     }
 }
-

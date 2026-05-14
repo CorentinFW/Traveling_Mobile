@@ -117,6 +117,7 @@
     <string name="travelpath_step_place_placeholder">Lieu-dit</string>
     <string name="travelpath_step_meta_placeholder">Xm | Y min | Z</string>
     <string name="travelpath_step_star">★</string>
+    <string name="travelpath_step_star_placeholder">0.0</string>
     <string name="travelpath_auth_success">Connexion réussie</string>
     <string name="travelpath_auth_error_google_cancelled">Connexion Google annulée</string>
     <string name="travelpath_auth_error_profile_save">Le profil na pas pu etre enregistre dans la base de donnees</string>
@@ -159,5 +160,11 @@
         <item>Thème (A-Z)</item>
         <item>Thème (Z-A)</item>
     </string-array>
-</resources>
 
+    <string name="travelpath_step_distance_km_format">%1$.1f km</string>
+    <string name="travelpath_step_distance_m_format">%1$d m</string>
+    <string name="travelpath_step_distance_unknown">Distance inconnue</string>
+    <string name="travelpath_route_name_prompt_title">Nom du parcours</string>
+    <string name="travelpath_route_name_confirm">Enregistrer</string>
+    <string name="travelpath_route_name_cancel">Annuler</string>
+</resources>

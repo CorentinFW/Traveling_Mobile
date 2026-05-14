@@ -55,16 +55,24 @@
                 android:textColor="#4B5563"
                 android:textSize="13sp" />
 
+            <TextView
+                android:id="@+id/travelpath_step_star_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/travelpath_step_star_placeholder"
+                android:textColor="#4B5563"
+                android:textSize="13sp" />
+
             <ImageView
                 android:id="@+id/travelpath_step_star"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginStart="6dp"
                 android:contentDescription="@string/travelpath_step_star"
-                android:src="@drawable/travelpath_star_on" />
+                android:src="@drawable/travelpath_star_on"
+                app:tint="#F59E0B" />
         </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

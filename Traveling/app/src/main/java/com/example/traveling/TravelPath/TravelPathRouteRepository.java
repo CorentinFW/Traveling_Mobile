@@ -11,7 +11,8 @@ import java.util.List;
 
 public class TravelPathRouteRepository {
 
-    private static final String COLLECTION_ROUTES = "travelpath_routes";
+    private static final String COLLECTION_USERS = "users";
+    private static final String COLLECTION_ROUTES = "routes";
 
     private final FirebaseFirestore firestore;
 
@@ -39,15 +40,18 @@ public class TravelPathRouteRepository {
         route.setOwnerUid(ownerUid);
         route.setCreatedAt(System.currentTimeMillis());
 
-        firestore.collection(COLLECTION_ROUTES)
+        firestore.collection(COLLECTION_USERS)
+                .document(ownerUid)
+                .collection(COLLECTION_ROUTES)
                 .add(route.toMap())
                 .addOnSuccessListener(documentReference -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
 
     public void loadRoutesForUser(@NonNull String ownerUid, @NonNull LoadCallback callback) {
-        firestore.collection(COLLECTION_ROUTES)
-                .whereEqualTo("ownerUid", ownerUid)
+        firestore.collection(COLLECTION_USERS)
+                .document(ownerUid)
+                .collection(COLLECTION_ROUTES)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     List<TravelPathRoute> routes = new ArrayList<>();
@@ -58,4 +62,3 @@ public class TravelPathRouteRepository {
                 .addOnFailureListener(callback::onError);
     }
 }
-

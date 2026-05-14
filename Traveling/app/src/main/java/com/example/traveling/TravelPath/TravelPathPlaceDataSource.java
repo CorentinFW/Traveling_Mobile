@@ -10,5 +10,6 @@ public interface TravelPathPlaceDataSource {
     void searchPlacesByName(@NonNull String query, @NonNull TravelPathPlaceRepository.LoadCallback callback);
 
     void loadRandomPlaces(@Nullable String themeFilter, @NonNull TravelPathPlaceRepository.LoadCallback callback);
-}
 
+    void loadAllPlaces(@NonNull TravelPathPlaceRepository.LoadCallback callback);
+}

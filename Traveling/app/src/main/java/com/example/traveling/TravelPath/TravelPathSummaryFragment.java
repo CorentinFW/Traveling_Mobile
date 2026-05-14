@@ -22,8 +22,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.traveling.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class TravelPathSummaryFragment extends Fragment {
 
@@ -51,7 +49,8 @@ public class TravelPathSummaryFragment extends Fragment {
     private static final String KEY_SELECTED_PLACE_ENTRIES = "selected_place_entries";
     private static final String ENTRY_SEPARATOR = "::";
 
-    private final TravelPathRouteRepository routeRepository = new TravelPathRouteRepository();
+    private final TravelPathItineraryPlanner itineraryPlanner = new TravelPathItineraryPlanner();
+    private final TravelPathPlaceRepository placeRepository = new TravelPathPlaceRepository();
 
     private TextView activitiesValue;
     private TextView budgetValue;
@@ -197,7 +196,7 @@ public class TravelPathSummaryFragment extends Fragment {
         Button continueButton = rootView.findViewById(R.id.travelpath_continue_button);
         continueButton.setOnClickListener(v -> {
             saveRouteTypeSelection();
-            saveCurrentRouteToFirestoreAndContinue();
+            generateItineraryAndContinue();
         });
     }
 
@@ -260,21 +259,14 @@ public class TravelPathSummaryFragment extends Fragment {
         return labels;
     }
 
-    private void saveCurrentRouteToFirestoreAndContinue() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            navigateToItinerary();
-            return;
-        }
-
-        TravelPathRoute route = buildRouteFromCurrentState();
-        routeRepository.saveRoute(user.getUid(), route, new TravelPathRouteRepository.SaveCallback() {
+    private void generateItineraryAndContinue() {
+        itineraryPlanner.generateItinerary(requireContext(), placeRepository, new TravelPathItineraryPlanner.ItineraryCallback() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(@NonNull List<TravelPathPlace> itinerary) {
                 if (!isAdded()) {
                     return;
                 }
-                Toast.makeText(requireContext(), R.string.travelpath_db_route_saved, Toast.LENGTH_SHORT).show();
+                TravelPathItineraryStore.saveItinerary(requireContext(), itinerary);
                 navigateToItinerary();
             }
 
@@ -283,52 +275,9 @@ public class TravelPathSummaryFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
-                Toast.makeText(requireContext(), R.string.travelpath_db_route_save_error, Toast.LENGTH_SHORT).show();
-                navigateToItinerary();
+                Toast.makeText(requireContext(), R.string.travelpath_results_load_error, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @NonNull
-    private TravelPathRoute buildRouteFromCurrentState() {
-        TravelPathRoute route = new TravelPathRoute();
-        route.setRouteName(buildDefaultRouteName());
-        route.setActivities(readText(activitiesValue));
-
-        SharedPreferences durationPrefs = getPreferences(PREFS_DURATION_BUDGET);
-        int budgetMin = Math.max(0, durationPrefs.getInt(KEY_BUDGET_MIN, 0));
-        int budgetMax = Math.max(0, durationPrefs.getInt(KEY_BUDGET_MAX, budgetMin));
-        route.setBudgetMin(budgetMin);
-        route.setBudgetMax(Math.max(budgetMin, budgetMax));
-
-        route.setVisitSummary(readText(durationValue));
-        route.setEffort(readText(effortValue));
-        route.setRouteType(readSelectedRouteType());
-        route.setPlacesSummary(readText(activitiesValue));
-        return route;
-    }
-
-    @NonNull
-    private String buildDefaultRouteName() {
-        String date = readSavedVisitDateLabel();
-        if (date.isEmpty()) {
-            return getString(R.string.travelpath_route_default_name_no_date);
-        }
-        return getString(R.string.travelpath_route_default_name_format, date);
-    }
-
-    @NonNull
-    private String readSelectedRouteType() {
-        Object selected = routeTypeSpinner.getSelectedItem();
-        return selected == null ? "" : selected.toString();
-    }
-
-    @NonNull
-    private String readText(@Nullable TextView view) {
-        if (view == null || view.getText() == null) {
-            return "";
-        }
-        return view.getText().toString().trim();
     }
 
     private void navigateToItinerary() {
@@ -405,4 +354,3 @@ public class TravelPathSummaryFragment extends Fragment {
         return context.getSharedPreferences(prefsName, Context.MODE_PRIVATE);
     }
 }
-
