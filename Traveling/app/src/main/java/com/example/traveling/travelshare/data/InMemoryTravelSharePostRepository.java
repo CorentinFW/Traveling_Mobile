@@ -4,66 +4,14 @@ import com.example.traveling.travelshare.domain.TravelSharePost;
 import com.example.traveling.travelshare.domain.TravelSharePostRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class InMemoryTravelSharePostRepository implements TravelSharePostRepository {
 
-    private final List<TravelSharePost> posts = new ArrayList<>(Arrays.asList(
-            new TravelSharePost(
-                    "1",
-                    "Lina",
-                    "Annecy",
-                    "Lac turquoise au lever du soleil",
-                    "Ete 2025",
-                    "Bus SIBRA + 12 min a pied",
-                    18,
-                    3
-            ),
-            new TravelSharePost(
-                    "2",
-                    "Mehdi",
-                    "Lisbonne",
-                    "Tram jaune et rues pavees dans l'Alfama",
-                    "Printemps 2024",
-                    "Metro + tram 28",
-                    42,
-                    7
-            ),
-            new TravelSharePost(
-                    "3",
-                    "Camille",
-                    "Tokyo",
-                    "Nuit neon a Shibuya et ramen incroyable",
-                    "Automne 2025",
-                    "JR Yamanote - station Shibuya",
-                    64,
-                    12
-            ),
-            new TravelSharePost(
-                    "4",
-                    "Yanis",
-                    "Marrakech",
-                    "Souk colore et epices partout",
-                    "Hiver 2024",
-                    "Taxi depuis la medina",
-                    27,
-                    5
-            ),
-            new TravelSharePost(
-                    "5",
-                    "Nora",
-                    "Reykjavik",
-                    "Road trip volcan et cascades en Islande",
-                    "Ete 2023",
-                    "Location voiture 4x4 depuis Keflavik",
-                    51,
-                    9
-            )
-    ));
+    private final List<TravelSharePost> posts = seedPosts();
 
-    private int nextGeneratedId = 6;
+    private int nextGeneratedId = 16;
 
     @Override
     public List<TravelSharePost> getFeedPosts() {
@@ -170,5 +118,31 @@ public class InMemoryTravelSharePostRepository implements TravelSharePostReposit
         // Most recent publication appears first in the feed.
         posts.add(0, createdPost);
         return createdPost;
+    }
+
+    private List<TravelSharePost> seedPosts() {
+        List<TravelSharePost> seededPosts = new ArrayList<>();
+
+        seededPosts.add(new TravelSharePost("1", "Corentin", "Tokyo", "Nuit neon a Shibuya et ramen incroyable", "Automne 2025", "JR Yamanote - station Shibuya", 64, 12));
+        seededPosts.add(new TravelSharePost("2", "Corentin", "Kyoto", "Temples dores et atmosphere apaisante", "Printemps 2025", "Train rapide depuis Osaka", 41, 8));
+        seededPosts.add(new TravelSharePost("3", "Corentin", "Paris", "Balade au bord de la Seine au coucher du soleil", "Ete 2024", "Metro ligne 1", 22, 4));
+
+        seededPosts.add(new TravelSharePost("4", "Lina", "Annecy", "Lac turquoise au lever du soleil", "Ete 2025", "Bus SIBRA + 12 min a pied", 18, 3));
+        seededPosts.add(new TravelSharePost("5", "Lina", "Lisbonne", "Tram jaune et rues pavees dans l'Alfama", "Printemps 2024", "Metro + tram 28", 42, 7));
+        seededPosts.add(new TravelSharePost("6", "Lina", "Porto", "Pont Dom Luis au coucher du soleil", "Automne 2024", "Train regional + marche", 35, 6));
+
+        seededPosts.add(new TravelSharePost("7", "Mehdi", "Marrakech", "Souk colore et epices partout", "Hiver 2024", "Taxi depuis la medina", 27, 5));
+        seededPosts.add(new TravelSharePost("8", "Mehdi", "Essaouira", "Vent marin et remparts face a l'ocean", "Printemps 2025", "Bus direct depuis Marrakech", 16, 2));
+        seededPosts.add(new TravelSharePost("9", "Mehdi", "Chefchaouen", "Ruelles bleues et ambiance paisible", "Ete 2023", "Bus local + marche", 38, 9));
+
+        seededPosts.add(new TravelSharePost("10", "Camille", "Reykjavik", "Road trip volcan et cascades en Islande", "Ete 2023", "Location voiture 4x4 depuis Keflavik", 51, 9));
+        seededPosts.add(new TravelSharePost("11", "Camille", "Oslo", "Fjords, musees et architecture scandinave", "Hiver 2024", "Metro + bateau", 29, 4));
+        seededPosts.add(new TravelSharePost("12", "Camille", "Seoul", "Nuit animee a Hongdae et cafes design", "Automne 2025", "Metro ligne 2", 46, 11));
+
+        seededPosts.add(new TravelSharePost("13", "Nora", "Bali", "Rizieres vertes et plages au lever du jour", "Printemps 2024", "Scooter depuis Ubud", 57, 10));
+        seededPosts.add(new TravelSharePost("14", "Nora", "Santorini", "Domes blancs et mer bleu profond", "Ete 2025", "Ferry + bus local", 31, 6));
+        seededPosts.add(new TravelSharePost("15", "Nora", "Rome", "Fontaines, piazzas et gelato a chaque coin de rue", "Automne 2024", "Metro + marche", 44, 8));
+
+        return seededPosts;
     }
 }

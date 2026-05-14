@@ -106,7 +106,7 @@ public class TravelPathAuthFragment extends Fragment {
         firebaseAuth.signInAnonymously()
                 .addOnSuccessListener(result -> {
                     setLoading(false);
-                    notifyAuthSuccess();
+                    persistAuthenticatedUserProfile("anonymous", () -> notifyAuthSuccess());
                 })
                 .addOnFailureListener(e -> {
                     setLoading(false);
@@ -126,7 +126,7 @@ public class TravelPathAuthFragment extends Fragment {
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(result -> {
                     setLoading(false);
-                    notifyAuthSuccess();
+                    persistAuthenticatedUserProfile("email_password", () -> notifyAuthSuccess());
                 })
                 .addOnFailureListener(e -> {
                     setLoading(false);
@@ -202,7 +202,7 @@ public class TravelPathAuthFragment extends Fragment {
             firebaseAuth.signInWithCredential(credential)
                     .addOnSuccessListener(result -> {
                         setLoading(false);
-                        notifyAuthSuccess();
+                        persistAuthenticatedUserProfile("google", () -> notifyAuthSuccess());
                     })
                     .addOnFailureListener(e -> {
                         setLoading(false);
@@ -264,6 +264,31 @@ public class TravelPathAuthFragment extends Fragment {
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();
         }
+    }
+
+    private void persistAuthenticatedUserProfile(@NonNull String provider, @NonNull Runnable onComplete) {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user == null) {
+            onComplete.run();
+            return;
+        }
+
+        userRepository.saveUserProfile(
+                user.getUid(),
+                user.getEmail(),
+                provider,
+                new TravelPathUserRepository.SaveCallback() {
+                    @Override
+                    public void onSuccess() {
+                        onComplete.run();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Exception exception) {
+                        onComplete.run();
+                    }
+                }
+        );
     }
 
     private void showError(@NonNull String message) {

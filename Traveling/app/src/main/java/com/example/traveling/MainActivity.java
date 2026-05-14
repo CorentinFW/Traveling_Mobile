@@ -2,6 +2,7 @@ package com.example.traveling;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -29,6 +30,8 @@ import com.example.traveling.travelshare.ui.navigation.TravelShareNavItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        logFirebaseProjectInfo();
+
+        // Enable Firestore-backed TravelShare providers so TravelShare data is persisted to Firebase.
+        try {
+            TravelShareDataProvider.useFirestore();
+        } catch (Exception e) {
+            Log.w("TravelShare", "Firestore provider switch failed", e);
+        }
 
         sessionRepository = TravelShareDataProvider.sessionRepository();
         sessionButton = findViewById(R.id.travelshare_session_button);
@@ -99,6 +111,14 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.travelshare_fragment_container, TravelSharePostDetailFragment.newInstance(postId))
                 .addToBackStack("post_detail")
+                .commit();
+    }
+
+    public void openUserProfile(String displayName) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.travelshare_fragment_container, TravelShareProfileFragment.newInstance(displayName))
+                .addToBackStack("profile")
                 .commit();
     }
 
@@ -158,5 +178,20 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.travelshare_fragment_container, fragment)
                 .commit();
+    }
+
+    private void logFirebaseProjectInfo() {
+        try {
+            FirebaseApp app = FirebaseApp.getInstance();
+            FirebaseOptions options = app.getOptions();
+            Log.i(
+                    "TravelShare",
+                    "Firebase projectId=" + options.getProjectId()
+                            + ", appId=" + options.getApplicationId()
+                            + ", gcmSenderId=" + options.getGcmSenderId()
+            );
+        } catch (IllegalStateException e) {
+            Log.w("TravelShare", "FirebaseApp not initialized", e);
+        }
     }
 }

@@ -20,12 +20,26 @@ import java.util.Locale;
 
 public class TravelSharePostAdapter extends BaseAdapter {
 
+    public interface OnAuthorClickListener {
+        void onAuthorClicked(String authorName);
+    }
+
     private final LayoutInflater inflater;
     private final List<TravelSharePost> posts;
+    private final OnAuthorClickListener onAuthorClickListener;
 
     public TravelSharePostAdapter(@NonNull Context context, @NonNull List<TravelSharePost> posts) {
+        this(context, posts, null);
+    }
+
+    public TravelSharePostAdapter(
+            @NonNull Context context,
+            @NonNull List<TravelSharePost> posts,
+            OnAuthorClickListener onAuthorClickListener
+    ) {
         this.inflater = LayoutInflater.from(context);
         this.posts = posts;
+        this.onAuthorClickListener = onAuthorClickListener;
     }
 
     @Override
@@ -55,7 +69,7 @@ public class TravelSharePostAdapter extends BaseAdapter {
         }
 
         TravelSharePost post = getItem(position);
-        holder.bind(convertView.getContext(), post, position == 0);
+        holder.bind(convertView.getContext(), post, position == 0, onAuthorClickListener);
         return convertView;
     }
 
@@ -78,7 +92,7 @@ public class TravelSharePostAdapter extends BaseAdapter {
             highlightView = root.findViewById(R.id.travelshare_post_highlight);
         }
 
-        void bind(Context context, TravelSharePost post, boolean highlight) {
+        void bind(Context context, TravelSharePost post, boolean highlight, OnAuthorClickListener onAuthorClickListener) {
             authorView.setText(post.getAuthorName());
             locationView.setText(post.getLocationName());
             descriptionView.setText(post.getDescription());
@@ -93,10 +107,18 @@ public class TravelSharePostAdapter extends BaseAdapter {
                 highlightView.setVisibility(View.GONE);
             }
 
-            setAvatarStyle(context, post.getAuthorName());
+            setAvatarStyle(post.getAuthorName());
+
+            View.OnClickListener authorClick = v -> {
+                if (onAuthorClickListener != null) {
+                    onAuthorClickListener.onAuthorClicked(post.getAuthorName());
+                }
+            };
+            avatarView.setOnClickListener(authorClick);
+            authorView.setOnClickListener(authorClick);
         }
 
-        private void setAvatarStyle(Context context, String authorName) {
+        private void setAvatarStyle(String authorName) {
             String initial = "?";
             if (authorName != null && !authorName.trim().isEmpty()) {
                 initial = authorName.trim().substring(0, 1).toUpperCase(Locale.ROOT);
@@ -114,6 +136,5 @@ public class TravelSharePostAdapter extends BaseAdapter {
         }
     }
 }
-
 
 

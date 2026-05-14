@@ -27,6 +27,12 @@ Le projet est maintenant suivi par etapes plutot que par jalons.
 - garder uniquement 3 utilisateurs amis pour alimenter les messages prives
 - afficher uniquement ces amis dans la partie `Messages`
 
+Note: l'implementation TravelShare propose maintenant une option Firestore. Lors du demarrage de l'application
+les repositories TravelShare sont basculés vers des implmentations Firestore et un petit seeder initialise
+la base si elle est vide (5 users + 15 posts + conversations de test). Pour des raisons de securite et de
+developpement, le seeder ne s'exécute qu'une seule fois et peut etre desactive manuellement en supprimant
+l'appel a `TravelShareFirestoreSeeder` dans `MainActivity`.
+
 ### Etape 2
 
 - en attente des prochaines consignes

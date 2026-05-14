@@ -19,6 +19,10 @@ import java.util.List;
 
 public class TravelShareHomeFragment extends Fragment {
 
+    private final List<TravelSharePost> posts = new java.util.ArrayList<>();
+    private TravelSharePostRepository postRepository;
+    private TravelSharePostAdapter adapter;
+
     public TravelShareHomeFragment() {
         super(R.layout.fragment_travelshare_home);
     }
@@ -29,10 +33,15 @@ public class TravelShareHomeFragment extends Fragment {
 
         ListView listView = view.findViewById(R.id.travelshare_home_list);
         TextView emptyView = view.findViewById(android.R.id.empty);
-        TravelSharePostRepository postRepository = TravelShareDataProvider.postRepository();
-        List<TravelSharePost> posts = postRepository.getFeedPosts();
+        postRepository = TravelShareDataProvider.postRepository();
+        posts.clear();
+        posts.addAll(postRepository.getFeedPosts());
 
-        TravelSharePostAdapter adapter = new TravelSharePostAdapter(requireContext(), posts);
+        adapter = new TravelSharePostAdapter(requireContext(), posts, authorName -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).openUserProfile(authorName);
+            }
+        });
         listView.setAdapter(adapter);
         listView.setDivider(null);
         listView.setDividerHeight(0);
@@ -44,5 +53,16 @@ public class TravelShareHomeFragment extends Fragment {
                 ((MainActivity) getActivity()).openPostDetail(selectedPost.getId());
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (postRepository == null || adapter == null) {
+            return;
+        }
+        posts.clear();
+        posts.addAll(postRepository.getFeedPosts());
+        adapter.notifyDataSetChanged();
     }
 }

@@ -17,6 +17,7 @@
 
     <string name="travelshare_profile_title">Mon profil</string>
     <string name="travelshare_profile_name_label">Compte actif</string>
+    <string name="travelshare_profile_add_friend">Ajouter en ami</string>
 
     <string name="travelshare_home_title">TravelShare</string>
     <string name="travelshare_home_subtitle">Decouverte de posts de voyage (mock)</string>
@@ -26,6 +27,18 @@
     <string name="travelshare_search_title">Recherche</string>
     <string name="travelshare_search_hint">Lieu, auteur, mot-cle…</string>
     <string name="travelshare_search_button">Chercher</string>
+    <string name="travelshare_search_profile_prefix">Profil</string>
+    <string name="travelshare_search_profile_friend_count">%1$d amis</string>
+    <string name="travelshare_search_profile_found">Profil trouve: %1$s</string>
+    <string name="travelshare_friend_request_title">Ajouter en ami</string>
+    <string name="travelshare_friend_request_message">Envoyer une demande d\'ami a %1$s (@%2$s) ?</string>
+    <string name="travelshare_friend_request_send">Envoyer la demande</string>
+    <string name="travelshare_friend_request_sent">Demande d\'ami envoyee</string>
+    <string name="travelshare_friend_request_already_pending">Demande deja en attente</string>
+    <string name="travelshare_friend_request_already_friends">Deja amis</string>
+    <string name="travelshare_friend_request_self">Tu ne peux pas t\'ajouter toi-meme</string>
+    <string name="travelshare_friend_request_failed">Impossible d\'envoyer la demande</string>
+    <string name="travelshare_friend_request_need_login">Connecte-toi pour envoyer une demande d\'ami</string>
 
     <string name="travelshare_messages_title">Messages</string>
     <string name="travelshare_messages_connected_hint">Conversations privees et groupes</string>
@@ -85,6 +98,7 @@
     <string name="travelshare_add_need_login_cta">Connexion requise</string>
     <string name="travelshare_add_need_login">Connecte-toi pour publier un post</string>
     <string name="travelshare_add_publish_success">Post publie</string>
+    <string name="travelshare_add_publish_failed">Publication impossible. Verifie la connexion et Firebase.</string>
 
     <string name="travelshare_itinerary_title">Itineraire</string>
     <string name="travelshare_itinerary_placeholder">Passerelle TravelPath a connecter en dernier.</string>

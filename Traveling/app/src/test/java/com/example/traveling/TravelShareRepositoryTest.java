@@ -3,10 +3,12 @@ package com.example.traveling;
 import com.example.traveling.travelshare.data.InMemoryTravelShareMessageRepository;
 import com.example.traveling.travelshare.data.InMemoryTravelSharePostRepository;
 import com.example.traveling.travelshare.data.InMemoryTravelShareSessionRepository;
+import com.example.traveling.travelshare.data.InMemoryTravelShareUserRepository;
 import com.example.traveling.travelshare.domain.TravelShareConversation;
 import com.example.traveling.travelshare.domain.TravelShareGroup;
 import com.example.traveling.travelshare.domain.TravelShareMessage;
 import com.example.traveling.travelshare.domain.TravelSharePost;
+import com.example.traveling.travelshare.domain.TravelShareUser;
 
 import org.junit.Test;
 
@@ -52,12 +54,38 @@ public class TravelShareRepositoryTest {
     }
 
     @Test
+    public void seedContainsFiveUsersAndThreeFriendsForCorentin() {
+        InMemoryTravelShareUserRepository repository = new InMemoryTravelShareUserRepository();
+
+        List<TravelShareUser> users = repository.getUsers();
+        assertEquals(5, users.size());
+
+        TravelShareUser corentin = repository.getUserByDisplayName("Corentin");
+        assertNotNull(corentin);
+        assertEquals(3, corentin.getFriendIds().size());
+        assertEquals(3, repository.getFriendsOf("Corentin").size());
+    }
+
+    @Test
+    public void seedContainsFifteenPostsAndThreePerUser() {
+        InMemoryTravelSharePostRepository repository = new InMemoryTravelSharePostRepository();
+
+        List<TravelSharePost> feed = repository.getFeedPosts();
+        assertEquals(15, feed.size());
+        assertEquals(3, repository.getPostsByAuthor("Corentin").size());
+        assertEquals(3, repository.getPostsByAuthor("Lina").size());
+        assertEquals(3, repository.getPostsByAuthor("Mehdi").size());
+        assertEquals(3, repository.getPostsByAuthor("Camille").size());
+        assertEquals(3, repository.getPostsByAuthor("Nora").size());
+    }
+
+    @Test
     public void messagesRepositoryReturnsSeededConversations() {
         InMemoryTravelShareMessageRepository repository = new InMemoryTravelShareMessageRepository();
 
         List<TravelShareConversation> conversations = repository.getConversations();
 
-        assertFalse(conversations.isEmpty());
+        assertEquals(3, conversations.size());
         assertEquals("c1", conversations.get(0).getId());
     }
 

@@ -1,13 +1,34 @@
 Plan de travail actuel
 
+Base Firebase NoSQL de reference
+
+- `users/{userId}`
+  - id
+  - nom
+  - prenom
+  - pseudo
+  - amis[]
+  - postIds[]
+- `posts/{postId}`
+  - id
+  - image
+  - description
+  - localite
+  - idUser / authorName
+  - likes[]
+  - commentaires[]
+
 Etape 1
-- Utiliser la base Firebase existante comme source de donnees de reference.
-- Creer 5 utilisateurs fictifs en brut.
+
+- Utiliser la base Firebase existante comme socle de donnees.
+- Mettre en brut 5 utilisateurs.
 - Donner 3 posts a chacun de ces 5 utilisateurs dans leur profil.
 - Limiter les messages prives aux amis uniquement.
 - Definir 3 amis parmi les 5 utilisateurs pour alimenter la partie messages.
+- Garder cette base comme reference pour les prochains ajustements.
 
 Etape 2
+
 - En attente des prochaines consignes.
 - Cette partie sera detaillee en plusieurs sous-etapes quand les ameliorations seront definies.
 

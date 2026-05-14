@@ -110,6 +110,15 @@
             android:layout_height="200dp"
             android:layout_marginTop="8dp" />
 
+        <!-- Add Friend button -->
+        <Button
+            android:id="@+id/travelshare_profile_add_friend_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/travelshare_profile_add_friend"
+            android:visibility="gone" />
+
         <!-- Logout button -->
         <Button
             android:id="@+id/travelshare_profile_logout_button"

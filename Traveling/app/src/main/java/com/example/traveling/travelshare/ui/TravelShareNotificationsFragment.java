@@ -32,7 +32,7 @@ public class TravelShareNotificationsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_travelshare_notifications, container, false);
-
+        
         notificationRepository = TravelShareDataProvider.notificationRepository();
         notificationsContainer = view.findViewById(R.id.notifications_container);
 
@@ -65,7 +65,7 @@ public class TravelShareNotificationsFragment extends Fragment {
             // Shape rond pour l'icone
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.OVAL);
-
+            
             // Personnalisation selon le type
             switch (notification.getType()) {
                 case "LIKE":
@@ -84,7 +84,7 @@ public class TravelShareNotificationsFragment extends Fragment {
             icon.setBackground(shape);
 
             contentText.setText(notification.getContent());
-
+            
             CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(notification.getTimestamp(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
             timeText.setText(timeAgo);
 

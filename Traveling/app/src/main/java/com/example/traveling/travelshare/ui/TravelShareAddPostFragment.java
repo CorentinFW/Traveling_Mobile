@@ -43,23 +43,40 @@ public class TravelShareAddPostFragment extends Fragment {
         }
 
         publishButton.setOnClickListener(v -> {
-            postRepository.createPost(
-                    sessionRepository.getDisplayName(),
-                    locationInput.getText().toString(),
-                    descriptionInput.getText().toString(),
-                    periodInput.getText().toString(),
-                    howToInput.getText().toString()
-            );
+            publishButton.setEnabled(false);
+            String authorName = sessionRepository.getDisplayName();
+            String location = locationInput.getText().toString();
+            String description = descriptionInput.getText().toString();
+            String period = periodInput.getText().toString();
+            String howTo = howToInput.getText().toString();
 
-            locationInput.setText("");
-            periodInput.setText("");
-            descriptionInput.setText("");
-            howToInput.setText("");
+            new Thread(() -> {
+                boolean success = postRepository.createPost(
+                        authorName,
+                        location,
+                        description,
+                        period,
+                        howTo
+                ) != null;
 
-            Toast.makeText(requireContext(), R.string.travelshare_add_publish_success, Toast.LENGTH_SHORT).show();
+                requireActivity().runOnUiThread(() -> {
+                    publishButton.setEnabled(true);
+                    if (!success) {
+                        Toast.makeText(requireContext(), R.string.travelshare_add_publish_failed, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.travelshare_bottom_nav);
-            bottomNavigationView.setSelectedItemId(R.id.travelshare_nav_home);
+                    locationInput.setText("");
+                    periodInput.setText("");
+                    descriptionInput.setText("");
+                    howToInput.setText("");
+
+                    Toast.makeText(requireContext(), R.string.travelshare_add_publish_success, Toast.LENGTH_SHORT).show();
+
+                    BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.travelshare_bottom_nav);
+                    bottomNavigationView.setSelectedItemId(R.id.travelshare_nav_home);
+                });
+            }).start();
         });
     }
 }

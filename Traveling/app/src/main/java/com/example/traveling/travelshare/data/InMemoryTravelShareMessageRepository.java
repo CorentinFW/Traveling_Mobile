@@ -8,6 +8,7 @@ import com.example.traveling.travelshare.domain.TravelShareMessage;
 import com.example.traveling.travelshare.domain.TravelShareMessageRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +68,7 @@ public class InMemoryTravelShareMessageRepository implements TravelShareMessageR
                 "Maintenant"
         );
 
-        List<TravelShareMessage> messages = messagesByConversationId.get(conversationId);
-        if (messages == null) {
-            messages = new ArrayList<>();
-            messagesByConversationId.put(conversationId, messages);
-        }
-        messages.add(createdMessage);
+        messagesByConversationId.computeIfAbsent(conversationId, key -> new ArrayList<>()).add(createdMessage);
 
         conversation.updateLastMessage(normalizedText, "Maintenant");
         moveConversationToTop(conversationId);
@@ -149,38 +145,38 @@ public class InMemoryTravelShareMessageRepository implements TravelShareMessageR
                 "c1",
                 "Lina",
                 false,
-                "Tu as des photos de Kyoto ?",
+                "Tu as des photos de Tokyo ?",
                 "Aujourd'hui"
         );
-        TravelShareConversation groupRoadTrip = new TravelShareConversation(
-                "c2",
-                "Groupe RoadTrip Europe",
-                true,
-                "Yanis: On part vendredi matin",
-                "Hier"
-        );
         TravelShareConversation dmCamille = new TravelShareConversation(
-                "c3",
+                "c2",
                 "Camille",
                 false,
-                "Top ton post sur Tokyo",
+                "On organise le prochain week-end ?",
+                "Hier"
+        );
+        TravelShareConversation dmNora = new TravelShareConversation(
+                "c3",
+                "Nora",
+                false,
+                "J'ai repere un spot incroyable a Reykjavik",
                 "2 j"
         );
 
         conversations.add(dmLina);
-        conversations.add(groupRoadTrip);
         conversations.add(dmCamille);
+        conversations.add(dmNora);
 
         messagesByConversationId.put("c1", buildMessages(
-                message("1", "c1", "Lina", "Tu as des photos de Kyoto ?", "09:12"),
+                message("1", "c1", "Lina", "Tu as des photos de Tokyo ?", "09:12"),
                 message("2", "c1", "Moi", "Oui, je te les envoie ce soir", "09:20")
         ));
         messagesByConversationId.put("c2", buildMessages(
-                message("3", "c2", "Nora", "On prend une voiture a Barcelone", "Hier"),
-                message("4", "c2", "Yanis", "On part vendredi matin", "Hier")
+                message("3", "c2", "Camille", "On organise le prochain week-end ?", "Hier"),
+                message("4", "c2", "Moi", "Pourquoi pas un pique-nique en bord de mer ?", "Hier")
         ));
         messagesByConversationId.put("c3", buildMessages(
-                message("5", "c3", "Camille", "Top ton post sur Tokyo", "Lun")
+                message("5", "c3", "Nora", "J'ai repere un spot incroyable a Reykjavik", "Lun")
         ));
     }
 
@@ -209,17 +205,13 @@ public class InMemoryTravelShareMessageRepository implements TravelShareMessageR
 
     private List<String> buildNames(String... names) {
         List<String> list = new ArrayList<>();
-        for (String name : names) {
-            list.add(name);
-        }
+        Collections.addAll(list, names);
         return list;
     }
 
     private List<TravelShareMessage> buildMessages(TravelShareMessage... messages) {
         List<TravelShareMessage> list = new ArrayList<>();
-        for (TravelShareMessage message : messages) {
-            list.add(message);
-        }
+        Collections.addAll(list, messages);
         return list;
     }
 
