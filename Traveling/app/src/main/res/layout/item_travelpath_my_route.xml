@@ -5,6 +5,9 @@
     android:layout_height="130dp"
     android:layout_marginBottom="10dp"
     android:background="@drawable/travelpath_my_route_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:padding="8dp">
 
     <androidx.constraintlayout.widget.Guideline
@@ -96,4 +99,3 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

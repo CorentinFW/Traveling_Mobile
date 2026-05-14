@@ -167,4 +167,9 @@
     <string name="travelpath_route_name_prompt_title">Nom du parcours</string>
     <string name="travelpath_route_name_confirm">Enregistrer</string>
     <string name="travelpath_route_name_cancel">Annuler</string>
+
+    <string name="travelpath_itinerary_prev_place">Lieu precedent</string>
+    <string name="travelpath_itinerary_next_place">Lieu suivant</string>
+    <string name="travelpath_fallback_used">Fallback utilisé : vérifie la base de données.</string>
+    <string name="travelpath_itinerary_empty">Aucun lieu disponible pour générer un parcours.</string>
 </resources>

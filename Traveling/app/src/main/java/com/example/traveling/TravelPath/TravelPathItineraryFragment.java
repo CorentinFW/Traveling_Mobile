@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,10 @@ import androidx.fragment.app.Fragment;
 import com.example.traveling.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -60,6 +65,9 @@ public class TravelPathItineraryFragment extends Fragment {
     private TextView budgetValue;
     private TextView durationValue;
     private TextView effortValue;
+    private ImageButton prevPlaceButton;
+    private ImageButton nextPlaceButton;
+    private int currentPlaceIndex = 0;
 
     private final TravelPathPlaceRepository placeRepository = new TravelPathPlaceRepository();
     private final TravelPathItineraryPlanner itineraryPlanner = new TravelPathItineraryPlanner();
@@ -76,11 +84,14 @@ public class TravelPathItineraryFragment extends Fragment {
         budgetValue = view.findViewById(R.id.travelpath_itinerary_budget_value);
         durationValue = view.findViewById(R.id.travelpath_itinerary_duration_value);
         effortValue = view.findViewById(R.id.travelpath_itinerary_effort_value);
+        prevPlaceButton = view.findViewById(R.id.travelpath_itinerary_prev_button);
+        nextPlaceButton = view.findViewById(R.id.travelpath_itinerary_next_button);
 
         setupMap();
         renderSummaryValues();
         renderItinerary();
         setupActions(view);
+        setupPlaceNavigation();
     }
 
     @Override
@@ -104,8 +115,65 @@ public class TravelPathItineraryFragment extends Fragment {
 
         ((SupportMapFragment) mapFragment).getMapAsync(map -> {
             googleMap = map;
-            TravelPathMapLocationHelper.centerMapOnUserOrFallback(this, map);
+            renderItineraryMarkers(lastRenderedItinerary);
+            if (!centerOnCurrentPlace(false)) {
+                TravelPathMapLocationHelper.centerMapOnUserOrFallback(this, map);
+            }
         });
+    }
+
+    private void setupPlaceNavigation() {
+        if (prevPlaceButton != null) {
+            prevPlaceButton.setOnClickListener(v -> moveToPlace(currentPlaceIndex - 1));
+        }
+        if (nextPlaceButton != null) {
+            nextPlaceButton.setOnClickListener(v -> moveToPlace(currentPlaceIndex + 1));
+        }
+        updateNavigationButtons();
+    }
+
+    private void moveToPlace(int newIndex) {
+        if (newIndex < 0 || newIndex >= lastRenderedItinerary.size()) {
+            return;
+        }
+        currentPlaceIndex = newIndex;
+        centerOnCurrentPlace(true);
+        updateNavigationButtons();
+    }
+
+    private void updateNavigationButtons() {
+        updateNavigationButton(prevPlaceButton, currentPlaceIndex > 0);
+        updateNavigationButton(nextPlaceButton, currentPlaceIndex + 1 < lastRenderedItinerary.size());
+    }
+
+    private void updateNavigationButton(@Nullable ImageButton button, boolean enabled) {
+        if (button == null) {
+            return;
+        }
+        button.setEnabled(enabled);
+        button.setAlpha(enabled ? 1f : 0.4f);
+    }
+
+    private boolean centerOnCurrentPlace(boolean animate) {
+        if (googleMap == null || lastRenderedItinerary.isEmpty()) {
+            return false;
+        }
+        if (currentPlaceIndex < 0 || currentPlaceIndex >= lastRenderedItinerary.size()) {
+            return false;
+        }
+        TravelPathPlace place = lastRenderedItinerary.get(currentPlaceIndex);
+        Double lat = place.getLatitude();
+        Double lng = place.getLongitude();
+        if (lat == null || lng == null) {
+            return false;
+        }
+        LatLng position = new LatLng(lat, lng);
+        if (animate) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 14f));
+        } else {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 14f));
+        }
+        return true;
     }
 
     private void setupActions(@NonNull View rootView) {
@@ -274,8 +342,40 @@ public class TravelPathItineraryFragment extends Fragment {
             stepMeta.setText(formatDistanceLabel(previousPlace, place));
             stepStarValue.setText(formatStarLabel(place));
 
+            itemView.setOnClickListener(v -> {
+                Fragment parent = getParentFragment();
+                if (parent instanceof TravelPathMainFragment) {
+                    ((TravelPathMainFragment) parent).showPlaceDetailScreen(place);
+                }
+            });
+
             itineraryContainer.addView(itemView);
             previousPlace = place;
+        }
+
+        lastRenderedItinerary = new ArrayList<>(itinerary);
+        currentPlaceIndex = 0;
+        renderItineraryMarkers(lastRenderedItinerary);
+        centerOnCurrentPlace(true);
+        updateNavigationButtons();
+    }
+
+    private List<TravelPathPlace> lastRenderedItinerary = new ArrayList<>();
+
+    private void renderItineraryMarkers(@NonNull List<TravelPathPlace> itinerary) {
+        if (googleMap == null) {
+            return;
+        }
+
+        googleMap.clear();
+        for (TravelPathPlace place : itinerary) {
+            Double lat = place.getLatitude();
+            Double lng = place.getLongitude();
+            if (lat == null || lng == null) {
+                continue;
+            }
+            LatLng position = new LatLng(lat, lng);
+            googleMap.addMarker(new MarkerOptions().position(position).title(place.getName()));
         }
     }
 
@@ -359,6 +459,7 @@ public class TravelPathItineraryFragment extends Fragment {
         route.setEffort(readEffortLabel());
         route.setRouteType(readSelectedRouteType());
         route.setPlacesSummary(buildPlacesSummary());
+        route.setPlaceReferences(buildPlaceReferences());
         return route;
     }
 
@@ -411,6 +512,19 @@ public class TravelPathItineraryFragment extends Fragment {
             names.add(place.getName());
         }
         return joinWithComma(names);
+    }
+
+    @NonNull
+    private List<String> buildPlaceReferences() {
+        List<TravelPathPlace> itinerary = TravelPathItineraryStore.loadItinerary(requireContext());
+        List<String> references = new ArrayList<>();
+        for (TravelPathPlace place : itinerary) {
+            String ref = place.getReference();
+            if (ref != null) {
+                references.add(ref);
+            }
+        }
+        return references;
     }
 
     @NonNull
@@ -508,3 +622,4 @@ public class TravelPathItineraryFragment extends Fragment {
         TravelPathItineraryStore.clear(context);
     }
 }
+

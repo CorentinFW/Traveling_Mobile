@@ -4,6 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="65dp"
     android:background="#E5E7EB"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:paddingStart="8dp"
     android:paddingEnd="8dp">
 

@@ -266,6 +266,13 @@ public class TravelPathSummaryFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
+                if (itinerary.isEmpty()) {
+                    Toast.makeText(requireContext(), R.string.travelpath_itinerary_empty, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (usesFallback(itinerary)) {
+                    Toast.makeText(requireContext(), R.string.travelpath_fallback_used, Toast.LENGTH_SHORT).show();
+                }
                 TravelPathItineraryStore.saveItinerary(requireContext(), itinerary);
                 navigateToItinerary();
             }
@@ -278,6 +285,15 @@ public class TravelPathSummaryFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.travelpath_results_load_error, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean usesFallback(@NonNull List<TravelPathPlace> itinerary) {
+        for (TravelPathPlace place : itinerary) {
+            if ("fallback".equals(place.getSourceCollection())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void navigateToItinerary() {

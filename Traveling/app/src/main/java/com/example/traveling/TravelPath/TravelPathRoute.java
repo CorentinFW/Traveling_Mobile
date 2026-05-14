@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TravelPathRoute {
@@ -21,6 +23,7 @@ public class TravelPathRoute {
     private String routeType;
     private String placesSummary;
     private long createdAt;
+    private List<String> placeReferences = new ArrayList<>();
 
     public TravelPathRoute() {
         // Required for Firebase/serialization.
@@ -39,6 +42,7 @@ public class TravelPathRoute {
         data.put("routeType", routeType);
         data.put("placesSummary", placesSummary);
         data.put("createdAt", createdAt);
+        data.put("placeReferences", new ArrayList<>(placeReferences));
         return data;
     }
 
@@ -56,6 +60,7 @@ public class TravelPathRoute {
         route.setRouteType(document.getString("routeType"));
         route.setPlacesSummary(document.getString("placesSummary"));
         route.setCreatedAt(readLong(document, "createdAt"));
+        route.setPlaceReferences(readStringList(document.get("placeReferences")));
         return route;
     }
 
@@ -167,5 +172,30 @@ public class TravelPathRoute {
     public void setCreatedAt(long createdAt) {
         this.createdAt = Math.max(0L, createdAt);
     }
-}
 
+    @NonNull
+    public List<String> getPlaceReferences() {
+        return placeReferences == null ? new ArrayList<>() : new ArrayList<>(placeReferences);
+    }
+
+    public void setPlaceReferences(@Nullable List<String> placeReferences) {
+        this.placeReferences = placeReferences == null ? new ArrayList<>() : new ArrayList<>(placeReferences);
+    }
+
+    @NonNull
+    private static List<String> readStringList(@Nullable Object raw) {
+        if (!(raw instanceof List<?>)) {
+            return new ArrayList<>();
+        }
+        List<String> values = new ArrayList<>();
+        for (Object entry : (List<?>) raw) {
+            if (entry != null) {
+                String value = entry.toString().trim();
+                if (!value.isEmpty()) {
+                    values.add(value);
+                }
+            }
+        }
+        return values;
+    }
+}

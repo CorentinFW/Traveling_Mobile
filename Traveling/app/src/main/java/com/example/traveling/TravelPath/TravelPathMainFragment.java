@@ -24,6 +24,15 @@ public class TravelPathMainFragment extends Fragment {
     private static final String KEY_PLACE_DETAIL_NAME = "travelpath_place_detail_name";
     private static final String KEY_PLACE_DETAIL_LAT = "travelpath_place_detail_lat";
     private static final String KEY_PLACE_DETAIL_LNG = "travelpath_place_detail_lng";
+    private static final String KEY_ROUTE_NAME = "travelpath_route_name";
+    private static final String KEY_ROUTE_ACTIVITIES = "travelpath_route_activities";
+    private static final String KEY_ROUTE_BUDGET_MIN = "travelpath_route_budget_min";
+    private static final String KEY_ROUTE_BUDGET_MAX = "travelpath_route_budget_max";
+    private static final String KEY_ROUTE_VISIT_SUMMARY = "travelpath_route_visit_summary";
+    private static final String KEY_ROUTE_EFFORT = "travelpath_route_effort";
+    private static final String KEY_ROUTE_TYPE = "travelpath_route_type";
+    private static final String KEY_ROUTE_PLACES_SUMMARY = "travelpath_route_places_summary";
+    private static final String KEY_ROUTE_CREATED_AT = "travelpath_route_created_at";
     private static final int MAX_HISTORY_SIZE = 5;
 
     private enum Screen {
@@ -37,6 +46,7 @@ public class TravelPathMainFragment extends Fragment {
         SUMMARY,
         ITINERARY,
         MY_ROUTES,
+        ITINERARY_SHARE,
         PLACE_DETAIL
     }
 
@@ -44,6 +54,8 @@ public class TravelPathMainFragment extends Fragment {
     private Screen currentScreen;
     @Nullable
     private TravelPathPlace currentDetailPlace;
+    @Nullable
+    private TravelPathRoute currentSharedRoute;
 
     public TravelPathMainFragment() {
         super(R.layout.fragment_travelpath_main);
@@ -90,6 +102,18 @@ public class TravelPathMainFragment extends Fragment {
             if (currentDetailPlace.getLongitude() != null) {
                 outState.putDouble(KEY_PLACE_DETAIL_LNG, currentDetailPlace.getLongitude());
             }
+        }
+
+        if (currentSharedRoute != null) {
+            outState.putString(KEY_ROUTE_NAME, currentSharedRoute.getRouteName());
+            outState.putString(KEY_ROUTE_ACTIVITIES, currentSharedRoute.getActivities());
+            outState.putInt(KEY_ROUTE_BUDGET_MIN, currentSharedRoute.getBudgetMin());
+            outState.putInt(KEY_ROUTE_BUDGET_MAX, currentSharedRoute.getBudgetMax());
+            outState.putString(KEY_ROUTE_VISIT_SUMMARY, currentSharedRoute.getVisitSummary());
+            outState.putString(KEY_ROUTE_EFFORT, currentSharedRoute.getEffort());
+            outState.putString(KEY_ROUTE_TYPE, currentSharedRoute.getRouteType());
+            outState.putString(KEY_ROUTE_PLACES_SUMMARY, currentSharedRoute.getPlacesSummary());
+            outState.putLong(KEY_ROUTE_CREATED_AT, currentSharedRoute.getCreatedAt());
         }
 
         ArrayList<String> serializedHistory = new ArrayList<>();
@@ -141,6 +165,11 @@ public class TravelPathMainFragment extends Fragment {
 
     public void showItineraryScreen() {
         navigateToScreen(Screen.ITINERARY);
+    }
+
+    public void showItineraryShareScreen(@NonNull TravelPathRoute route) {
+        currentSharedRoute = route;
+        navigateToCustomScreen(Screen.ITINERARY_SHARE, TravelPathItineraryShareFragment.newInstance(route));
     }
 
     public void showPlaceDetailScreen(@NonNull TravelPathPlace place) {
@@ -229,6 +258,12 @@ public class TravelPathMainFragment extends Fragment {
         if (screen == Screen.AUTH) {
             return new TravelPathAuthFragment();
         }
+        if (screen == Screen.ITINERARY_SHARE) {
+            if (currentSharedRoute != null) {
+                return TravelPathItineraryShareFragment.newInstance(currentSharedRoute);
+            }
+            return new TravelPathItineraryShareFragment();
+        }
         if (screen == Screen.ITINERARY) {
             return new TravelPathItineraryFragment();
         }
@@ -276,6 +311,22 @@ public class TravelPathMainFragment extends Fragment {
             currentDetailPlace = new TravelPathPlace(detailName, "", null, detailLat, detailLng);
         }
 
+        if (savedInstanceState.containsKey(KEY_ROUTE_NAME)
+                || savedInstanceState.containsKey(KEY_ROUTE_PLACES_SUMMARY)
+                || savedInstanceState.containsKey(KEY_ROUTE_CREATED_AT)) {
+            TravelPathRoute restoredRoute = new TravelPathRoute();
+            restoredRoute.setRouteName(savedInstanceState.getString(KEY_ROUTE_NAME));
+            restoredRoute.setActivities(savedInstanceState.getString(KEY_ROUTE_ACTIVITIES));
+            restoredRoute.setBudgetMin(savedInstanceState.getInt(KEY_ROUTE_BUDGET_MIN, 0));
+            restoredRoute.setBudgetMax(savedInstanceState.getInt(KEY_ROUTE_BUDGET_MAX, 0));
+            restoredRoute.setVisitSummary(savedInstanceState.getString(KEY_ROUTE_VISIT_SUMMARY));
+            restoredRoute.setEffort(savedInstanceState.getString(KEY_ROUTE_EFFORT));
+            restoredRoute.setRouteType(savedInstanceState.getString(KEY_ROUTE_TYPE));
+            restoredRoute.setPlacesSummary(savedInstanceState.getString(KEY_ROUTE_PLACES_SUMMARY));
+            restoredRoute.setCreatedAt(savedInstanceState.getLong(KEY_ROUTE_CREATED_AT, 0L));
+            currentSharedRoute = restoredRoute;
+        }
+
         if (!isUserAuthenticated()) {
             currentScreen = Screen.AUTH;
             screenHistory.clear();
@@ -321,6 +372,7 @@ public class TravelPathMainFragment extends Fragment {
     public void resetToWelcomeScreen() {
         screenHistory.clear();
         currentDetailPlace = null;
+        currentSharedRoute = null;
         currentScreen = Screen.WELCOME;
         replaceInjectedScreen(currentScreen);
     }
@@ -328,6 +380,7 @@ public class TravelPathMainFragment extends Fragment {
     public void resetToMyRoutesScreen() {
         screenHistory.clear();
         currentDetailPlace = null;
+        currentSharedRoute = null;
         currentScreen = Screen.MY_ROUTES;
         replaceInjectedScreen(currentScreen);
     }

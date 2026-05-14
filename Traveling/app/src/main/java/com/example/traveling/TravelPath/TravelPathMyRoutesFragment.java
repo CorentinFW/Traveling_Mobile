@@ -109,6 +109,13 @@ public class TravelPathMyRoutesFragment extends Fragment {
         routeDays.setText(nonEmptyOrDefault(route.getVisitSummary(), R.string.travelpath_my_route_days_placeholder));
         routeEffort.setText(nonEmptyOrDefault(route.getEffort(), R.string.travelpath_my_route_effort_placeholder));
         routePlaces.setText(nonEmptyOrDefault(route.getPlacesSummary(), R.string.travelpath_my_route_places_placeholder));
+
+        itemView.setOnClickListener(v -> {
+            Fragment parent = getParentFragment();
+            if (parent instanceof TravelPathMainFragment) {
+                ((TravelPathMainFragment) parent).showItineraryShareScreen(route);
+            }
+        });
     }
 
     @NonNull
@@ -130,4 +137,3 @@ public class TravelPathMyRoutesFragment extends Fragment {
         routesContainer.addView(message);
     }
 }
-
