@@ -46,13 +46,30 @@ public class TravelSharePostDetailFragment extends Fragment {
 
         TravelSharePostRepository postRepository = TravelShareDataProvider.postRepository();
         TravelShareSessionRepository sessionRepository = TravelShareDataProvider.sessionRepository();
-        TravelSharePost post = postRepository.getPostById(postId);
 
-        if (post == null) {
+        new Thread(() -> {
+            TravelSharePost loadedPost = postRepository.getPostById(postId);
+            requireActivity().runOnUiThread(() -> bindPost(view, postId, loadedPost, postRepository, sessionRepository));
+        }).start();
+    }
+
+    private void bindPost(
+            View view,
+            String postId,
+            TravelSharePost loadedPost,
+            TravelSharePostRepository postRepository,
+            TravelShareSessionRepository sessionRepository
+    ) {
+        if (!isAdded()) {
+            return;
+        }
+        if (loadedPost == null) {
             Toast.makeText(requireContext(), R.string.travelshare_post_not_found, Toast.LENGTH_SHORT).show();
             requireActivity().getSupportFragmentManager().popBackStack();
             return;
         }
+
+        final TravelSharePost[] postHolder = new TravelSharePost[]{loadedPost};
 
         TextView title = view.findViewById(R.id.travelshare_detail_title);
         TextView author = view.findViewById(R.id.travelshare_detail_author);
@@ -65,28 +82,46 @@ public class TravelSharePostDetailFragment extends Fragment {
         Button reportButton = view.findViewById(R.id.travelshare_detail_report_button);
         Button commentButton = view.findViewById(R.id.travelshare_detail_comment_button);
 
-        author.setText(getString(R.string.travelshare_post_author_format, post.getAuthorName()));
-        title.setText(post.getLocationName());
-        description.setText(post.getDescription());
-        period.setText(getString(R.string.travelshare_post_period_format, post.getPeriod()));
-        howTo.setText(getString(R.string.travelshare_post_how_to_format, post.getHowToGetThere()));
+        author.setText(getString(R.string.travelshare_post_author_format, postHolder[0].getAuthorName()));
+        title.setText(postHolder[0].getLocationName());
+        description.setText(postHolder[0].getDescription());
+        period.setText(getString(R.string.travelshare_post_period_format, postHolder[0].getPeriod()));
+        howTo.setText(getString(R.string.travelshare_post_how_to_format, postHolder[0].getHowToGetThere()));
 
-        refreshButtons(post, social, likeButton, commentInput, commentButton, sessionRepository);
+        refreshButtons(postHolder[0], social, likeButton, commentInput, commentButton, sessionRepository);
 
-        likeButton.setOnClickListener(v -> {
+        likeButton.setOnClickListener(v -> new Thread(() -> {
             postRepository.toggleLike(postId);
-            refreshButtons(post, social, likeButton, commentInput, commentButton, sessionRepository);
-        });
+            TravelSharePost updated = postRepository.getPostById(postId);
+            requireActivity().runOnUiThread(() -> {
+                if (!isAdded()) {
+                    return;
+                }
+                if (updated != null) {
+                    postHolder[0] = updated;
+                }
+                refreshButtons(postHolder[0], social, likeButton, commentInput, commentButton, sessionRepository);
+            });
+        }).start());
 
-        reportButton.setOnClickListener(v -> {
+        reportButton.setOnClickListener(v -> new Thread(() -> {
             int reportCount = postRepository.reportPost(postId);
-            refreshButtons(post, social, likeButton, commentInput, commentButton, sessionRepository);
-            Toast.makeText(
-                    requireContext(),
-                    getString(R.string.travelshare_report_done, reportCount),
-                    Toast.LENGTH_SHORT
-            ).show();
-        });
+            TravelSharePost updated = postRepository.getPostById(postId);
+            requireActivity().runOnUiThread(() -> {
+                if (!isAdded()) {
+                    return;
+                }
+                if (updated != null) {
+                    postHolder[0] = updated;
+                }
+                refreshButtons(postHolder[0], social, likeButton, commentInput, commentButton, sessionRepository);
+                Toast.makeText(
+                        requireContext(),
+                        getString(R.string.travelshare_report_done, reportCount),
+                        Toast.LENGTH_SHORT
+                ).show();
+            });
+        }).start());
 
         commentButton.setOnClickListener(v -> {
             if (!sessionRepository.isAuthenticated()) {
@@ -100,14 +135,25 @@ public class TravelSharePostDetailFragment extends Fragment {
                 return;
             }
 
-            int commentCount = postRepository.addComment(postId, commentText);
-            commentInput.setText("");
-            refreshButtons(post, social, likeButton, commentInput, commentButton, sessionRepository);
-            Toast.makeText(
-                    requireContext(),
-                    getString(R.string.travelshare_comment_added, commentCount),
-                    Toast.LENGTH_SHORT
-            ).show();
+            new Thread(() -> {
+                int commentCount = postRepository.addComment(postId, commentText);
+                TravelSharePost updated = postRepository.getPostById(postId);
+                requireActivity().runOnUiThread(() -> {
+                    if (!isAdded()) {
+                        return;
+                    }
+                    commentInput.setText("");
+                    if (updated != null) {
+                        postHolder[0] = updated;
+                    }
+                    refreshButtons(postHolder[0], social, likeButton, commentInput, commentButton, sessionRepository);
+                    Toast.makeText(
+                            requireContext(),
+                            getString(R.string.travelshare_comment_added, commentCount),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                });
+            }).start();
         });
     }
 
@@ -138,4 +184,3 @@ public class TravelSharePostDetailFragment extends Fragment {
         }
     }
 }
-

@@ -37,9 +37,9 @@ public class TravelShareHomeFragment extends Fragment {
         posts.clear();
         posts.addAll(postRepository.getFeedPosts());
 
-        adapter = new TravelSharePostAdapter(requireContext(), posts, authorName -> {
+        adapter = new TravelSharePostAdapter(requireContext(), posts, post -> {
             if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openUserProfile(authorName);
+                ((MainActivity) getActivity()).openUserProfile(post.getAuthorName(), post.getAuthorId());
             }
         });
         listView.setAdapter(adapter);

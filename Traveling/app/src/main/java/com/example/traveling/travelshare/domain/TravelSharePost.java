@@ -2,6 +2,7 @@ package com.example.traveling.travelshare.domain;
 
 public class TravelSharePost {
     private final String id;
+    private final String authorId;
     private final String authorName;
     private final String locationName;
     private final String description;
@@ -23,7 +24,22 @@ public class TravelSharePost {
             int likeCount,
             int commentCount
     ) {
+        this(id, null, authorName, locationName, description, period, howToGetThere, likeCount, commentCount);
+    }
+
+    public TravelSharePost(
+            String id,
+            String authorId,
+            String authorName,
+            String locationName,
+            String description,
+            String period,
+            String howToGetThere,
+            int likeCount,
+            int commentCount
+    ) {
         this.id = id;
+        this.authorId = authorId;
         this.authorName = authorName;
         this.locationName = locationName;
         this.description = description;
@@ -37,6 +53,10 @@ public class TravelSharePost {
 
     public String getId() {
         return id;
+    }
+
+    public String getAuthorId() {
+        return authorId;
     }
 
     public String getAuthorName() {

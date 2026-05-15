@@ -115,9 +115,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openUserProfile(String displayName) {
+        openUserProfile(displayName, null);
+    }
+
+    public void openUserProfile(String displayName, String authorId) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.travelshare_fragment_container, TravelShareProfileFragment.newInstance(displayName))
+                .replace(R.id.travelshare_fragment_container, TravelShareProfileFragment.newInstance(displayName, authorId))
                 .addToBackStack("profile")
                 .commit();
     }

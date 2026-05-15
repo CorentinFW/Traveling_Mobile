@@ -21,15 +21,20 @@ import java.util.Locale;
 public class TravelSharePostAdapter extends BaseAdapter {
 
     public interface OnAuthorClickListener {
-        void onAuthorClicked(String authorName);
+        void onAuthorClicked(TravelSharePost post);
+    }
+
+    public interface OnPostClickListener {
+        void onPostClicked(TravelSharePost post);
     }
 
     private final LayoutInflater inflater;
     private final List<TravelSharePost> posts;
     private final OnAuthorClickListener onAuthorClickListener;
+    private final OnPostClickListener onPostClickListener;
 
     public TravelSharePostAdapter(@NonNull Context context, @NonNull List<TravelSharePost> posts) {
-        this(context, posts, null);
+        this(context, posts, null, null);
     }
 
     public TravelSharePostAdapter(
@@ -37,9 +42,19 @@ public class TravelSharePostAdapter extends BaseAdapter {
             @NonNull List<TravelSharePost> posts,
             OnAuthorClickListener onAuthorClickListener
     ) {
+        this(context, posts, onAuthorClickListener, null);
+    }
+
+    public TravelSharePostAdapter(
+            @NonNull Context context,
+            @NonNull List<TravelSharePost> posts,
+            OnAuthorClickListener onAuthorClickListener,
+            OnPostClickListener onPostClickListener
+    ) {
         this.inflater = LayoutInflater.from(context);
         this.posts = posts;
         this.onAuthorClickListener = onAuthorClickListener;
+        this.onPostClickListener = onPostClickListener;
     }
 
     @Override
@@ -69,7 +84,7 @@ public class TravelSharePostAdapter extends BaseAdapter {
         }
 
         TravelSharePost post = getItem(position);
-        holder.bind(convertView.getContext(), post, position == 0, onAuthorClickListener);
+        holder.bind(convertView.getContext(), post, position == 0, onAuthorClickListener, onPostClickListener);
         return convertView;
     }
 
@@ -81,8 +96,10 @@ public class TravelSharePostAdapter extends BaseAdapter {
         private final TextView metaView;
         private final TextView statsView;
         private final TextView highlightView;
+        private final View itemView;
 
         ViewHolder(View root) {
+            itemView = root;
             avatarView = root.findViewById(R.id.travelshare_post_avatar);
             authorView = root.findViewById(R.id.travelshare_post_author);
             locationView = root.findViewById(R.id.travelshare_post_location);
@@ -92,7 +109,7 @@ public class TravelSharePostAdapter extends BaseAdapter {
             highlightView = root.findViewById(R.id.travelshare_post_highlight);
         }
 
-        void bind(Context context, TravelSharePost post, boolean highlight, OnAuthorClickListener onAuthorClickListener) {
+        void bind(Context context, TravelSharePost post, boolean highlight, OnAuthorClickListener onAuthorClickListener, OnPostClickListener onPostClickListener) {
             authorView.setText(post.getAuthorName());
             locationView.setText(post.getLocationName());
             descriptionView.setText(post.getDescription());
@@ -111,11 +128,16 @@ public class TravelSharePostAdapter extends BaseAdapter {
 
             View.OnClickListener authorClick = v -> {
                 if (onAuthorClickListener != null) {
-                    onAuthorClickListener.onAuthorClicked(post.getAuthorName());
+                    onAuthorClickListener.onAuthorClicked(post);
                 }
             };
             avatarView.setOnClickListener(authorClick);
             authorView.setOnClickListener(authorClick);
+
+            if (onPostClickListener != null) {
+                View.OnClickListener postClick = v -> onPostClickListener.onPostClicked(post);
+                itemView.setOnClickListener(postClick);
+            }
         }
 
         private void setAvatarStyle(String authorName) {
@@ -136,5 +158,3 @@ public class TravelSharePostAdapter extends BaseAdapter {
         }
     }
 }
-
-

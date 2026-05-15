@@ -37,6 +37,7 @@ import java.util.Set;
 public class TravelShareProfileFragment extends Fragment {
 
     private static final String ARG_PROFILE_DISPLAY_NAME = "profile_display_name";
+    private static final String ARG_PROFILE_AUTHOR_ID = "profile_author_id";
     private TravelShareUserRepository userRepository;
     private TravelShareUser currentUserEntity;
     private TravelShareUser profileUserEntity;
@@ -49,6 +50,15 @@ public class TravelShareProfileFragment extends Fragment {
         TravelShareProfileFragment fragment = new TravelShareProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PROFILE_DISPLAY_NAME, displayName);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static TravelShareProfileFragment newInstance(String displayName, String authorId) {
+        TravelShareProfileFragment fragment = new TravelShareProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PROFILE_DISPLAY_NAME, displayName);
+        args.putString(ARG_PROFILE_AUTHOR_ID, authorId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,9 +82,19 @@ public class TravelShareProfileFragment extends Fragment {
         String currentUser = sessionRepository.getDisplayName();
         String profileUser = resolveProfileUser(currentUser);
         currentUserEntity = resolveCurrentUserEntity(currentUser);
-        profileUserEntity = resolveUserEntity(profileUser);
 
-        boolean isOwnProfile = isOwnProfile(currentUser, profileUser, profileUserEntity);
+        String profileAuthorId = resolveProfileAuthorId();
+        boolean isOwnProfile = isOwnProfile(currentUser, profileUser, null);
+        if (profileAuthorId != null && FirebaseAuth.getInstance().getCurrentUser() != null) {
+            isOwnProfile = profileAuthorId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+        profileUserEntity = resolveUserEntity(profileUser, isOwnProfile, profileAuthorId);
+        isOwnProfile = isOwnProfile(currentUser, profileUser, profileUserEntity);
+        if (profileAuthorId != null && FirebaseAuth.getInstance().getCurrentUser() != null) {
+            isOwnProfile = profileAuthorId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+        final boolean isOwnProfileFinal = isOwnProfile;
+        final String profileAuthorIdFinal = profileAuthorId;
 
         String displayedName = profileUserEntity == null ? profileUser : buildDisplayName(profileUserEntity);
         nameView.setText(displayedName);
@@ -103,33 +123,35 @@ public class TravelShareProfileFragment extends Fragment {
                     currentUser,
                     profileUser,
                     profileUserEntity,
-                    isOwnProfile
+                    isOwnProfileFinal,
+                    profileAuthorIdFinal
             );
             requireActivity().runOnUiThread(() -> {
                 postsCountView.setText(String.valueOf(userPosts.size()));
                 groupsCountView.setText("0"); // Will be updated in next iteration with group repo
 
-                TravelSharePostAdapter adapter = new TravelSharePostAdapter(requireContext(), userPosts, authorName -> {
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).openUserProfile(authorName);
-                    }
-                });
+                TravelSharePostAdapter adapter = new TravelSharePostAdapter(
+                        requireContext(),
+                        userPosts,
+                        post -> {
+                            if (getActivity() instanceof MainActivity) {
+                                ((MainActivity) getActivity()).openUserProfile(post.getAuthorName(), post.getAuthorId());
+                            }
+                        },
+                        post -> {
+                            if (getActivity() instanceof MainActivity) {
+                                ((MainActivity) getActivity()).openPostDetail(post.getId());
+                            }
+                        }
+                );
                 postsListView.setAdapter(adapter);
-                postsListView.setOnItemClickListener((parent, itemView, position, id) -> {
-                    if (position < 0 || position >= userPosts.size()) {
-                        return;
-                    }
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).openPostDetail(userPosts.get(position).getId());
-                    }
-                });
             });
         }).start();
 
-        logoutButton.setVisibility(isOwnProfile ? View.VISIBLE : View.GONE);
-        addFriendButton.setVisibility(!isOwnProfile ? View.VISIBLE : View.GONE);
+        logoutButton.setVisibility(isOwnProfileFinal ? View.VISIBLE : View.GONE);
+        addFriendButton.setVisibility(!isOwnProfileFinal ? View.VISIBLE : View.GONE);
 
-        if (!isOwnProfile) {
+        if (!isOwnProfileFinal) {
             addFriendButton.setOnClickListener(v -> openFriendRequestDialog());
         }
 
@@ -239,9 +261,19 @@ public class TravelShareProfileFragment extends Fragment {
         return localPart != null && trimmed.equalsIgnoreCase(localPart);
     }
 
-    private TravelShareUser resolveUserEntity(String displayName) {
+    private TravelShareUser resolveUserEntity(String displayName, boolean allowFirebaseFallback) {
+        return resolveUserEntity(displayName, allowFirebaseFallback, null);
+    }
+
+    private TravelShareUser resolveUserEntity(String displayName, boolean allowFirebaseFallback, String authorId) {
+        if (authorId != null && !authorId.trim().isEmpty()) {
+            TravelShareUser byId = userRepository.getUserById(authorId.trim());
+            if (byId != null) {
+                return byId;
+            }
+        }
         if (displayName == null || displayName.trim().isEmpty()) {
-            return resolveUserEntityFromFirebase();
+            return allowFirebaseFallback ? resolveUserEntityFromFirebase() : null;
         }
         String normalized = displayName.trim();
         TravelShareUser resolved = userRepository.getUserByDisplayName(displayName);
@@ -265,12 +297,7 @@ public class TravelShareProfileFragment extends Fragment {
             }
         }
 
-        resolved = resolveUserEntityFromFirebase();
-        if (resolved != null) {
-            return resolved;
-        }
-
-        return null;
+        return allowFirebaseFallback ? resolveUserEntityFromFirebase() : null;
     }
 
     private TravelShareUser resolveCurrentUserEntity(String displayName) {
@@ -295,7 +322,7 @@ public class TravelShareProfileFragment extends Fragment {
             }
         }
 
-        TravelShareUser fallback = resolveUserEntity(displayName);
+        TravelShareUser fallback = resolveUserEntity(displayName, true);
         if (fallback != null) {
             return fallback;
         }
@@ -371,27 +398,40 @@ public class TravelShareProfileFragment extends Fragment {
             TravelShareUser profileUserEntity,
             boolean isOwnProfile
     ) {
-        Set<String> aliases = buildAuthorAliases(userRepository, currentUser, profileUser);
-        Map<String, TravelSharePost> unique = new LinkedHashMap<>();
+        return loadPostsForProfile(postRepository, userRepository, currentUser, profileUser, profileUserEntity, isOwnProfile, null);
+    }
 
+    private List<TravelSharePost> loadPostsForProfile(
+            TravelSharePostRepository postRepository,
+            TravelShareUserRepository userRepository,
+            String currentUser,
+            String profileUser,
+            TravelShareUser profileUserEntity,
+            boolean isOwnProfile,
+            String profileAuthorId
+    ) {
+        LinkedHashMap<String, TravelSharePost> unique = new LinkedHashMap<>();
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String firebaseUid = firebaseUser == null ? null : firebaseUser.getUid();
+
+        if (profileAuthorId != null && !profileAuthorId.trim().isEmpty()) {
+            for (TravelSharePost post : postRepository.getPostsByAuthorId(profileAuthorId.trim())) {
+                unique.put(post.getId(), post);
+            }
+            return new ArrayList<>(unique.values());
+        }
+
+        String profileUserId = null;
         if (profileUserEntity != null && profileUserEntity.getId() != null && !profileUserEntity.getId().trim().isEmpty()) {
-            for (TravelSharePost post : postRepository.getPostsByAuthorId(profileUserEntity.getId().trim())) {
+            profileUserId = profileUserEntity.getId().trim();
+            for (TravelSharePost post : postRepository.getPostsByAuthorId(profileUserId)) {
                 unique.put(post.getId(), post);
             }
         }
 
-        if (isOwnProfile) {
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (firebaseUser != null) {
-                for (TravelSharePost post : postRepository.getPostsByAuthorId(firebaseUser.getUid())) {
-                    unique.put(post.getId(), post);
-                }
-            }
-        }
-
-        for (String alias : aliases) {
-            List<TravelSharePost> byAuthor = postRepository.getPostsByAuthor(alias);
-            for (TravelSharePost post : byAuthor) {
+        if (unique.isEmpty() && isOwnProfile && firebaseUid != null && (profileUserId == null || !firebaseUid.equals(profileUserId))) {
+            for (TravelSharePost post : postRepository.getPostsByAuthorId(firebaseUid)) {
                 unique.put(post.getId(), post);
             }
         }
@@ -400,15 +440,16 @@ public class TravelShareProfileFragment extends Fragment {
             return new ArrayList<>(unique.values());
         }
 
-        // Fallback: filtre sur le feed complet si la requete auteur stricte ne renvoie rien.
-        List<TravelSharePost> fromFeed = new ArrayList<>();
+        Set<String> aliases = buildAuthorAliases(userRepository, currentUser, profileUser);
+        Map<String, TravelSharePost> filteredByAlias = new LinkedHashMap<>();
+        // Filtre local sur le feed pour eviter des requetes repetitives par alias.
         for (TravelSharePost post : postRepository.getFeedPosts()) {
             String author = post.getAuthorName();
             if (matchesAnyAlias(author, aliases)) {
-                fromFeed.add(post);
+                filteredByAlias.put(post.getId(), post);
             }
         }
-        return fromFeed;
+        return new ArrayList<>(filteredByAlias.values());
     }
 
     private Set<String> buildAuthorAliases(TravelShareUserRepository userRepository, String currentUser, String profileUser) {
@@ -479,5 +520,16 @@ public class TravelShareProfileFragment extends Fragment {
         }
         return trimmed;
     }
-}
 
+    private String resolveProfileAuthorId() {
+        Bundle args = getArguments();
+        if (args == null) {
+            return null;
+        }
+        String authorId = args.getString(ARG_PROFILE_AUTHOR_ID);
+        if (authorId == null || authorId.trim().isEmpty()) {
+            return null;
+        }
+        return authorId.trim();
+    }
+}

@@ -96,10 +96,10 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
             if (!result.isEmpty()) {
                 return result;
             }
-            return getPostsByAuthor(authorId);
+            return new ArrayList<>();
         } catch (Exception e) {
             Log.w("TravelShare", "Firestore getPostsByAuthorId failed", e);
-            return getPostsByAuthor(authorId);
+            return new ArrayList<>();
         }
     }
 
@@ -221,6 +221,7 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
 
     private TravelSharePost mapDoc(DocumentSnapshot doc) {
         String id = doc.getId();
+        String authorId = doc.getString("authorId");
         String authorName = doc.getString("authorName");
         String locationName = doc.getString("locationName");
         String description = doc.getString("description");
@@ -230,7 +231,7 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
         Number comment = doc.getLong("commentCount");
         int likeCount = like == null ? 0 : like.intValue();
         int commentCount = comment == null ? 0 : comment.intValue();
-        return new TravelSharePost(id, authorName, locationName, description, period, howToGetThere, likeCount, commentCount);
+        return new TravelSharePost(id, authorId, authorName, locationName, description, period, howToGetThere, likeCount, commentCount);
     }
 
     private List<TravelSharePost> getFallbackPosts() {

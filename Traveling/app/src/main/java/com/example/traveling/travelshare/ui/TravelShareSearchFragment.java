@@ -56,7 +56,7 @@ public class TravelShareSearchFragment extends Fragment {
             SearchResultItem item = latestResults.get(position);
             if (item.type == SearchResultType.USER) {
                 if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).openUserProfile(resolveProfileDisplayName(item.user));
+                    ((MainActivity) getActivity()).openUserProfile(resolveProfileDisplayName(item.user), item.user.getId());
                 }
                 return;
             }
