@@ -9,6 +9,8 @@ public interface TravelSharePostRepository {
 
     List<TravelSharePost> getPostsByAuthor(String authorName);
 
+    List<TravelSharePost> getPostsByAuthorId(String authorId);
+
     TravelSharePost getPostById(String postId);
 
     TravelSharePost createPost(

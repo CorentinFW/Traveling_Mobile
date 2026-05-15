@@ -13,7 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-
+/tools
 # Copilot local metadata
 /.idea/*copilot*
 

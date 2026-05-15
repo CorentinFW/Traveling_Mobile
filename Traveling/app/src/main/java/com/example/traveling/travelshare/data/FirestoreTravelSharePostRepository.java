@@ -81,6 +81,29 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
     }
 
     @Override
+    public List<TravelSharePost> getPostsByAuthorId(String authorId) {
+        if (authorId == null) return new ArrayList<>();
+        try {
+            QuerySnapshot snap = Tasks.await(
+                    firestore.collection(POSTS_COLLECTION).whereEqualTo("authorId", authorId).get(),
+                    5,
+                    TimeUnit.SECONDS
+            );
+            List<TravelSharePost> result = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : snap) {
+                result.add(mapDoc(doc));
+            }
+            if (!result.isEmpty()) {
+                return result;
+            }
+            return getPostsByAuthor(authorId);
+        } catch (Exception e) {
+            Log.w("TravelShare", "Firestore getPostsByAuthorId failed", e);
+            return getPostsByAuthor(authorId);
+        }
+    }
+
+    @Override
     public TravelSharePost getPostById(String postId) {
         if (postId == null) return null;
         try {

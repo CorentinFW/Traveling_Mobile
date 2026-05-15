@@ -54,6 +54,11 @@ public class InMemoryTravelSharePostRepository implements TravelSharePostReposit
     }
 
     @Override
+    public List<TravelSharePost> getPostsByAuthorId(String authorId) {
+        return getPostsByAuthor(authorId);
+    }
+
+    @Override
     public TravelSharePost getPostById(String postId) {
         for (TravelSharePost post : posts) {
             if (post.getId().equals(postId)) {

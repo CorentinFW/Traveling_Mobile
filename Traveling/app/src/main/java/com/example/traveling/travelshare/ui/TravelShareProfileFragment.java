@@ -74,6 +74,8 @@ public class TravelShareProfileFragment extends Fragment {
         currentUserEntity = resolveCurrentUserEntity(currentUser);
         profileUserEntity = resolveUserEntity(profileUser);
 
+        boolean isOwnProfile = isOwnProfile(currentUser, profileUser, profileUserEntity);
+
         String displayedName = profileUserEntity == null ? profileUser : buildDisplayName(profileUserEntity);
         nameView.setText(displayedName);
 
@@ -94,32 +96,42 @@ public class TravelShareProfileFragment extends Fragment {
         avatarView.setTextColor(textColor);
 
         // Load user's posts with tolerant aliases (pseudo, prenom, email local-part)
-        List<TravelSharePost> userPosts = loadPostsForProfile(postRepository, userRepository, currentUser, profileUser);
-        postsCountView.setText(String.valueOf(userPosts.size()));
-        groupsCountView.setText("0"); // Will be updated in next iteration with group repo
+        new Thread(() -> {
+            List<TravelSharePost> userPosts = loadPostsForProfile(
+                    postRepository,
+                    userRepository,
+                    currentUser,
+                    profileUser,
+                    profileUserEntity,
+                    isOwnProfile
+            );
+            requireActivity().runOnUiThread(() -> {
+                postsCountView.setText(String.valueOf(userPosts.size()));
+                groupsCountView.setText("0"); // Will be updated in next iteration with group repo
 
-        boolean isOwnProfile = isOwnProfile(currentUser, profileUser);
+                TravelSharePostAdapter adapter = new TravelSharePostAdapter(requireContext(), userPosts, authorName -> {
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).openUserProfile(authorName);
+                    }
+                });
+                postsListView.setAdapter(adapter);
+                postsListView.setOnItemClickListener((parent, itemView, position, id) -> {
+                    if (position < 0 || position >= userPosts.size()) {
+                        return;
+                    }
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).openPostDetail(userPosts.get(position).getId());
+                    }
+                });
+            });
+        }).start();
+
         logoutButton.setVisibility(isOwnProfile ? View.VISIBLE : View.GONE);
         addFriendButton.setVisibility(!isOwnProfile ? View.VISIBLE : View.GONE);
 
         if (!isOwnProfile) {
             addFriendButton.setOnClickListener(v -> openFriendRequestDialog());
         }
-
-        TravelSharePostAdapter adapter = new TravelSharePostAdapter(requireContext(), userPosts, authorName -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openUserProfile(authorName);
-            }
-        });
-        postsListView.setAdapter(adapter);
-        postsListView.setOnItemClickListener((parent, itemView, position, id) -> {
-            if (position < 0 || position >= userPosts.size()) {
-                return;
-            }
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openPostDetail(userPosts.get(position).getId());
-            }
-        });
 
         // Logout button
         logoutButton.setOnClickListener(v -> {
@@ -192,11 +204,39 @@ public class TravelShareProfileFragment extends Fragment {
         return requestedUser.trim();
     }
 
-    private boolean isOwnProfile(String currentUser, String profileUser) {
+    private boolean isOwnProfile(String currentUser, String profileUser, TravelShareUser profileUserEntity) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            String uid = firebaseUser.getUid();
+            if (profileUserEntity != null && uid != null && uid.equals(profileUserEntity.getId())) {
+                return true;
+            }
+            if (matchesFirebaseIdentity(profileUser, firebaseUser) || matchesFirebaseIdentity(currentUser, firebaseUser)) {
+                return true;
+            }
+            if ((profileUser == null || profileUser.trim().isEmpty()) && (currentUser == null || currentUser.trim().isEmpty())) {
+                return true;
+            }
+        }
         if (currentUser == null || profileUser == null) {
             return false;
         }
         return currentUser.trim().equalsIgnoreCase(profileUser.trim());
+    }
+
+    private boolean matchesFirebaseIdentity(String candidate, FirebaseUser firebaseUser) {
+        if (candidate == null || candidate.trim().isEmpty()) {
+            return false;
+        }
+        String trimmed = candidate.trim();
+        if (firebaseUser.getDisplayName() != null && trimmed.equalsIgnoreCase(firebaseUser.getDisplayName().trim())) {
+            return true;
+        }
+        if (firebaseUser.getEmail() != null && trimmed.equalsIgnoreCase(firebaseUser.getEmail().trim())) {
+            return true;
+        }
+        String localPart = extractLocalPart(firebaseUser.getEmail());
+        return localPart != null && trimmed.equalsIgnoreCase(localPart);
     }
 
     private TravelShareUser resolveUserEntity(String displayName) {
@@ -327,10 +367,27 @@ public class TravelShareProfileFragment extends Fragment {
             TravelSharePostRepository postRepository,
             TravelShareUserRepository userRepository,
             String currentUser,
-            String profileUser
+            String profileUser,
+            TravelShareUser profileUserEntity,
+            boolean isOwnProfile
     ) {
         Set<String> aliases = buildAuthorAliases(userRepository, currentUser, profileUser);
         Map<String, TravelSharePost> unique = new LinkedHashMap<>();
+
+        if (profileUserEntity != null && profileUserEntity.getId() != null && !profileUserEntity.getId().trim().isEmpty()) {
+            for (TravelSharePost post : postRepository.getPostsByAuthorId(profileUserEntity.getId().trim())) {
+                unique.put(post.getId(), post);
+            }
+        }
+
+        if (isOwnProfile) {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (firebaseUser != null) {
+                for (TravelSharePost post : postRepository.getPostsByAuthorId(firebaseUser.getUid())) {
+                    unique.put(post.getId(), post);
+                }
+            }
+        }
 
         for (String alias : aliases) {
             List<TravelSharePost> byAuthor = postRepository.getPostsByAuthor(alias);
