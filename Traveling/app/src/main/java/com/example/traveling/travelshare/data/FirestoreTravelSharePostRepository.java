@@ -37,13 +37,10 @@ public class FirestoreTravelSharePostRepository implements TravelSharePostReposi
             for (QueryDocumentSnapshot doc : snap) {
                 result.add(mapDoc(doc));
             }
-            if (!result.isEmpty()) {
-                return result;
-            }
-            return getFallbackPosts();
+            return result;
         } catch (Exception e) {
             Log.w("TravelShare", "Firestore getFeedPosts failed", e);
-            return getFallbackPosts();
+            return new ArrayList<>();
         }
     }
 
